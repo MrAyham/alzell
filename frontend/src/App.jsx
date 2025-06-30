@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from './supabase'
+import KingDashboard from './pages/KingDashboard'
 
 function Auth({ onLogin }) {
   const [email, setEmail] = useState('')
@@ -106,13 +107,16 @@ const tables = [
 function App() {
   const [session, setSession] = useState(null)
   const [tab, setTab] = useState(tables[0])
+  const [isKing, setIsKing] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
+      setIsKing(session?.user?.user_metadata?.role === 'King')
     })
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
+      setIsKing(session?.user?.user_metadata?.role === 'King')
     })
   }, [])
 
@@ -128,8 +132,17 @@ function App() {
             {t.name}
           </button>
         ))}
+        {isKing && (
+          <button onClick={() => setTab({ name: 'King', table: 'king' })} className={tab.table === 'king' ? 'underline' : ''}>
+            King
+          </button>
+        )}
       </nav>
-      <DataTable table={tab.table} />
+      {tab.table === 'king' ? (
+        <KingDashboard />
+      ) : (
+        <DataTable table={tab.table} />
+      )}
     </div>
   )
 }
