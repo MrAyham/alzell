@@ -148,3 +148,34 @@ function App() {
 }
 
 export default App
+
+
+import { useEffect, useState } from 'react'
+import { supabase } from './supabase'
+
+function App() {
+  const [menu, setMenu] = useState([])
+
+  useEffect(() => {
+    supabase
+      .from('menu_items')
+      .select('*')
+      .then(({ data, error }) => {
+        if (error) console.error(error)
+        else setMenu(data)
+      })
+  }, [])
+
+  return (
+    <div>
+      <h1>Menu</h1>
+      <ul>
+        {menu.map((item) => (
+          <li key={item.id}>{item.name} - ${item.price}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+export default App
