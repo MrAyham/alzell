@@ -19,3 +19,12 @@
     "@vitejs/plugin-react": "^4.0.0"
   }
 }
+
+
+
+{
+  "name": "chefmind",
+  "version": "1.0.0",
+  "type": "module",        ← هذا هو السطر الجديد
+  ...
+}
