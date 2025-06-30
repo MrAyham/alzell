@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { supabase } from './supabase'
-import './index.css'
 
 function App() {
   const [menu, setMenu] = useState([])
