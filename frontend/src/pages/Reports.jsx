@@ -35,13 +35,22 @@ export default function Reports({ onBack }) {
 
   async function addReport(e) {
     e.preventDefault()
-    await supabase.from('daily_reports').insert({
+    if (!formData.staff_id || !formData.date || !formData.shift || !formData.notes || !formData.issues) {
+      alert('Please fill in all fields')
+      return
+    }
+    const { error } = await supabase.from('daily_reports').insert({
       staff_id: formData.staff_id,
       date: formData.date,
       shift: formData.shift,
       notes: formData.notes,
       issues: formData.issues
     })
+    if (error) {
+      alert('Failed to save report')
+      return
+    }
+    alert('Report saved successfully')
     setFormData({ staff_id: '', date: '', shift: '', notes: '', issues: '' })
     setShowForm(false)
     fetchReports()
@@ -79,6 +88,7 @@ export default function Reports({ onBack }) {
             className='border p-1 w-full text-black'
             value={formData.staff_id}
             onChange={e => setFormData({ ...formData, staff_id: e.target.value })}
+            required
           >
             <option value=''>Select Staff</option>
             {staff.map(s => (
@@ -92,24 +102,31 @@ export default function Reports({ onBack }) {
             className='border p-1 w-full text-black'
             value={formData.date}
             onChange={e => setFormData({ ...formData, date: e.target.value })}
+            required
           />
-          <input
+          <select
             className='border p-1 w-full text-black'
-            placeholder='Shift'
             value={formData.shift}
             onChange={e => setFormData({ ...formData, shift: e.target.value })}
-          />
+            required
+          >
+            <option value=''>Select Shift</option>
+            <option value='Morning'>Morning</option>
+            <option value='Night'>Night</option>
+          </select>
           <textarea
             className='border p-1 w-full text-black'
             placeholder='Notes'
             value={formData.notes}
             onChange={e => setFormData({ ...formData, notes: e.target.value })}
+            required
           />
           <textarea
             className='border p-1 w-full text-black'
             placeholder='Issues'
             value={formData.issues}
             onChange={e => setFormData({ ...formData, issues: e.target.value })}
+            required
           />
           <div className='space-x-2'>
             <button type='submit' className='border px-2 py-1'>Save</button>
