@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase'
+import { useRole } from '../RoleContext'
 
 export default function Reports({ onBack }) {
+  const { role } = useRole()
   const [reports, setReports] = useState([])
   const [staff, setStaff] = useState([])
   const [showForm, setShowForm] = useState(false)
@@ -70,8 +72,9 @@ export default function Reports({ onBack }) {
           ))}
         </tbody>
       </table>
-      {showForm ? (
-        <form onSubmit={addReport} className='space-y-2'>
+      {role !== 'Worker' && (
+        showForm ? (
+          <form onSubmit={addReport} className='space-y-2'>
           <select
             className='border p-1 w-full text-black'
             value={formData.staff_id}
@@ -119,7 +122,7 @@ export default function Reports({ onBack }) {
         <button className='border px-2 py-1' onClick={() => setShowForm(true)}>
           Add Report
         </button>
-      )}
+      ))}
       <button className='border px-2 py-1' onClick={onBack}>Back</button>
     </div>
   )
