@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { addStaff } from '../supabase/staff'
 
 export default function AddStaffModal({ isOpen, onClose, onAdded }) {
-  const [form, setForm] = useState({ name: '', role: '', shift: '', status: '' })
+  const [form, setForm] = useState({ name: '', role: 'Chef', shift: 'Morning', status: 'Active' })
+
+  const roles = ['Chef', 'Cashier', 'Server']
+  const shifts = ['Morning', 'Evening']
+  const statuses = ['Active', 'On Leave', 'Terminated']
 
   if (!isOpen) return null
 
@@ -10,11 +14,16 @@ export default function AddStaffModal({ isOpen, onClose, onAdded }) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
+  function handleCancel() {
+    setForm({ name: '', role: 'Chef', shift: 'Morning', status: 'Active' })
+    onClose()
+  }
+
   async function handleSubmit(e) {
     e.preventDefault()
     await addStaff(form)
     onAdded()
-    setForm({ name: '', role: '', shift: '', status: '' })
+    setForm({ name: '', role: 'Chef', shift: 'Morning', status: 'Active' })
     onClose()
   }
 
@@ -30,30 +39,39 @@ export default function AddStaffModal({ isOpen, onClose, onAdded }) {
             value={form.name}
             onChange={handleChange}
           />
-          <input
+          <select
             className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
-            placeholder="Role"
             name="role"
             value={form.role}
             onChange={handleChange}
-          />
-          <input
+          >
+            {roles.map(r => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+          <select
             className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
-            placeholder="Shift"
             name="shift"
             value={form.shift}
             onChange={handleChange}
-          />
-          <input
+          >
+            {shifts.map(s => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+          <select
             className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
-            placeholder="Status"
             name="status"
             value={form.status}
             onChange={handleChange}
-          />
+          >
+            {statuses.map(s => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
           <div className="space-x-2">
             <button type="submit" className="border border-[#800000] px-2 py-1">Save</button>
-            <button type="button" className="border border-[#800000] px-2 py-1" onClick={onClose}>
+            <button type="button" className="border border-[#800000] px-2 py-1" onClick={handleCancel}>
               Cancel
             </button>
           </div>
