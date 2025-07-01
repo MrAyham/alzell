@@ -11,6 +11,8 @@ export default function StaffTable() {
   const [showAdd, setShowAdd] = useState(false)
   const [editItem, setEditItem] = useState(null)
 
+  const roleIcons = { Chef: '🍳', Cashier: '💰', Server: '🍽️' }
+
   useEffect(() => {
     fetchStaff()
   }, [filters])
@@ -85,7 +87,10 @@ export default function StaffTable() {
           {staff.map(s => (
             <tr key={s.id} className="border-b border-[#800000]">
               <td className="p-2">{s.name}</td>
-              <td className="p-2">{s.role}</td>
+              <td className="p-2 flex items-center space-x-1">
+                <span>{roleIcons[s.role] || '👤'}</span>
+                <span>{s.role}</span>
+              </td>
               <td className="p-2">{s.shift}</td>
               <td className="p-2">{s.status}</td>
               <td className="p-2">{new Date(s.created_at).toLocaleString()}</td>
