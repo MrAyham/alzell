@@ -17,8 +17,17 @@ create table daily_reports (
   created_at timestamp default now()
 );
 
+ codex/build-smart-alerts-system-in-chefmind
 create table dismissed_alerts (
   id uuid default uuid_generate_v4() primary key,
   message text,
+=======
+create table daily_tasks (
+  id uuid default uuid_generate_v4() primary key,
+  task text,
+  shift text,
+  status text default 'pending',
+  staff_id uuid references staff(id),
+ main
   created_at timestamp default now()
 );
