@@ -4,6 +4,7 @@ import Reports from './pages/Reports'
 import Alerts from './pages/Alerts'
 import KingDashboard from './pages/KingDashboard'
 import DailyTasks from './pages/DailyTasks'
+import StaffPage from './pages/StaffPage'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
@@ -23,6 +24,11 @@ function App() {
 =======
   } else if (page === 'tasks') {
     content = <DailyTasks />
+ codex/create-staffpage-with-crud-and-filters
+  } else if (page === 'staff') {
+    content = <StaffPage />
+=======
+ main
  main
   } else {
     content = <Home onViewReports={() => setPage('reports')} />
