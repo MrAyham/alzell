@@ -11,7 +11,10 @@ export default function Sidebar({ onNavigate }) {
       <button className="block" onClick={() => onNavigate('reports')}>
         Reports
       </button>
- codex/build-smart-alerts-system-in-chefmind
+      <button className="block" onClick={() => onNavigate('inventory')}>
+        Inventory
+      </button>
+codex/build-smart-alerts-system-in-chefmind
       <button className="block" onClick={() => onNavigate('alerts')}>
         Alerts
 =======
