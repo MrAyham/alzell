@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import Reports from './pages/Reports'
 import KingDashboard from './pages/KingDashboard'
 import DailyTasks from './pages/DailyTasks'
+import StaffPage from './pages/StaffPage'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
@@ -18,6 +19,8 @@ function App() {
     content = <Reports onBack={() => setPage('home')} />
   } else if (page === 'tasks') {
     content = <DailyTasks />
+  } else if (page === 'staff') {
+    content = <StaffPage />
   } else {
     content = <Home onViewReports={() => setPage('reports')} />
   }

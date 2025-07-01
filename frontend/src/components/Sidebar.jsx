@@ -11,6 +11,9 @@ export default function Sidebar({ onNavigate }) {
       <button className="block" onClick={() => onNavigate('reports')}>
         Reports
       </button>
+      <button className="block" onClick={() => onNavigate('staff')}>
+        Staff
+      </button>
       <button className="block" onClick={() => onNavigate('tasks')}>
         Tasks
       </button>
