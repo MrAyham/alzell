@@ -16,3 +16,12 @@ create table daily_reports (
   issues text,
   created_at timestamp default now()
 );
+
+create table daily_tasks (
+  id uuid default uuid_generate_v4() primary key,
+  task text,
+  shift text,
+  status text default 'pending',
+  staff_id uuid references staff(id),
+  created_at timestamp default now()
+);
