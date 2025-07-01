@@ -1,6 +1,13 @@
 import React from 'react'
+import { useRole } from '../RoleContext'
 
 export default function KingDashboard() {
+  const { role } = useRole()
+
+  if (role !== 'King') {
+    return <div>You do not have access to this page.</div>
+  }
+
   return (
     <div className="min-h-screen bg-black p-6 text-[#FFD700] space-y-4">
       <h1 className="text-lg font-semibold">لوحة تحكم الملك</h1>
