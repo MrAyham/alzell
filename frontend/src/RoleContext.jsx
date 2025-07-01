@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 
-export const RoleContext = createContext({ role: null })
+export const RoleContext = createContext({ role: null, name: null })
 
 export function RoleProvider({ children }) {
   // TODO: later role should come from Supabase session
@@ -9,9 +9,10 @@ export function RoleProvider({ children }) {
     role: 'King',
   }
   const [role] = useState(currentUser.role)
+  const [name] = useState(currentUser.name)
 
   return (
-    <RoleContext.Provider value={{ role }}>
+    <RoleContext.Provider value={{ role, name }}>
       {children}
     </RoleContext.Provider>
   )

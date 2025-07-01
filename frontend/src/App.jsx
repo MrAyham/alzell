@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Home from './pages/Home'
 import Reports from './pages/Reports'
 import KingDashboard from './pages/KingDashboard'
+import DailyTasks from './pages/DailyTasks'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
@@ -15,6 +16,8 @@ function App() {
     content = <KingDashboard />
   } else if (page === 'reports') {
     content = <Reports onBack={() => setPage('home')} />
+  } else if (page === 'tasks') {
+    content = <DailyTasks />
   } else {
     content = <Home onViewReports={() => setPage('reports')} />
   }
