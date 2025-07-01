@@ -4,7 +4,11 @@ import Reports from './pages/Reports'
 import Alerts from './pages/Alerts'
 import KingDashboard from './pages/KingDashboard'
 import DailyTasks from './pages/DailyTasks'
+ codex/create-inventory-system-page
+import InventoryPage from './pages/InventoryPage'
+=======
 import StaffPage from './pages/StaffPage'
+ main
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
@@ -18,6 +22,8 @@ function App() {
     content = <KingDashboard />
   } else if (page === 'reports') {
     content = <Reports onBack={() => setPage('home')} />
+  } else if (page === 'inventory') {
+    content = <InventoryPage />
  codex/build-smart-alerts-system-in-chefmind
   } else if (page === 'alerts') {
     content = <Alerts />

@@ -11,12 +11,19 @@ export default function Sidebar({ onNavigate }) {
       <button className="block" onClick={() => onNavigate('reports')}>
         Reports
       </button>
+ codex/create-inventory-system-page
+      <button className="block" onClick={() => onNavigate('inventory')}>
+        Inventory
+      </button>
+codex/build-smart-alerts-system-in-chefmind
+=======
  codex/create-staffpage-with-crud-and-filters
       <button className="block" onClick={() => onNavigate('staff')}>
         Staff
       </button>
 =======
  codex/build-smart-alerts-system-in-chefmind
+ main
       <button className="block" onClick={() => onNavigate('alerts')}>
         Alerts
 =======
