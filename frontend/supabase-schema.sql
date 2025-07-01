@@ -16,3 +16,9 @@ create table daily_reports (
   issues text,
   created_at timestamp default now()
 );
+
+create table dismissed_alerts (
+  id uuid default uuid_generate_v4() primary key,
+  message text,
+  created_at timestamp default now()
+);

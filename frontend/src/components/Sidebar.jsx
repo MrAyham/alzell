@@ -11,6 +11,9 @@ export default function Sidebar({ onNavigate }) {
       <button className="block" onClick={() => onNavigate('reports')}>
         Reports
       </button>
+      <button className="block" onClick={() => onNavigate('alerts')}>
+        Alerts
+      </button>
       {role === 'King' && (
         <button className="block" onClick={() => onNavigate('king')}>Admin Panel</button>
       )}
