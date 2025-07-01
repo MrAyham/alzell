@@ -1,22 +1,16 @@
 import { useEffect, useState } from 'react'
-import { supabase, logKingAction } from './supabase'
+import { logKingAction } from './supabase'
+import Home from './pages/Home'
+import Reports from './pages/Reports'
 import KingDashboard from './pages/KingDashboard'
 
 function App() {
-  const [menu, setMenu] = useState([])
   const [isKing, setIsKing] = useState(() => {
     return localStorage.getItem('isKing') === 'true'
   })
   const [showModal, setShowModal] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
-
-  useEffect(() => {
-    async function fetchMenu() {
-      const { data } = await supabase.from('menu_items').select()
-      setMenu(data || [])
-    }
-    fetchMenu()
-  }, [])
+  const [page, setPage] = useState('home')
 
   useEffect(() => {
     localStorage.setItem('isKing', isKing)
@@ -39,12 +33,11 @@ function App() {
         </>
       ) : (
         <>
-          <h1 className='text-2xl font-bold mb-4 text-center text-red-700'>Welcome to ChefMind 👨‍🍳</h1>
-          <ul>
-            {menu.map(item => (
-              <li key={item.id}>{item.name} - {'$' + item.price}</li>
-            ))}
-          </ul>
+          {page === 'home' ? (
+            <Home onViewReports={() => setPage('reports')} />
+          ) : (
+            <Reports onBack={() => setPage('home')} />
+          )}
           <button
             className='fixed bottom-4 right-4 text-sm text-gray-400 underline'
             onClick={() => setShowModal(true)}
