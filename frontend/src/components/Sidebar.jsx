@@ -8,8 +8,8 @@ export default function Sidebar({ onNavigate }) {
       <button className="block" onClick={() => onNavigate('home')}>
         Home
       </button>
-      <button className="block" onClick={() => onNavigate('reports')}>
-        Reports
+      <button className="block" onClick={() => onNavigate('dailyReports')}>
+        Daily Reports
       </button>
       <button className="block" onClick={() => onNavigate('inventory')}>
         Inventory

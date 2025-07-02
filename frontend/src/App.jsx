@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Home from './pages/Home'
-import Reports from './pages/Reports'
+import DailyReports from './pages/DailyReports'
 import Alerts from './pages/Alerts'
 import KingDashboard from './pages/KingDashboard'
 import DailyTasks from './pages/DailyTasks'
@@ -17,8 +17,8 @@ function App() {
   let content
   if (role === 'King' && page === 'king') {
     content = <KingDashboard />
-  } else if (page === 'reports') {
-    content = <Reports onBack={() => setPage('home')} />
+  } else if (page === 'dailyReports') {
+    content = <DailyReports onBack={() => setPage('home')} />
   } else if (page === 'inventory') {
     content = <InventoryPage />
   } else if (page === 'alerts') {
@@ -28,7 +28,7 @@ function App() {
   } else if (page === 'staff') {
     content = <StaffPage />
   } else {
-    content = <Home onViewReports={() => setPage('reports')} />
+    content = <Home onViewReports={() => setPage('dailyReports')} />
   }
 
   return (
