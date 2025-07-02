@@ -31,3 +31,11 @@ create table daily_tasks (
  main
   created_at timestamp default now()
 );
+
+create table shifts_schedule (
+  id uuid default uuid_generate_v4() primary key,
+  staff_id uuid references staff(id),
+  day text,
+  shift text,
+  created_at timestamp default now()
+);

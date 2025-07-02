@@ -6,6 +6,7 @@ import KingDashboard from './pages/KingDashboard'
 import DailyTasks from './pages/DailyTasks'
 import InventoryPage from './pages/InventoryPage'
 import StaffPage from './pages/StaffPage'
+import ShiftScheduler from './pages/ShiftScheduler'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
@@ -27,6 +28,8 @@ function App() {
     content = <DailyTasks />
   } else if (page === 'staff') {
     content = <StaffPage />
+  } else if (page === 'schedule') {
+    content = <ShiftScheduler />
   } else {
     content = <Home onViewReports={() => setPage('dailyReports')} />
   }
