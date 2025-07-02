@@ -7,6 +7,7 @@ import DailyTasks from './pages/DailyTasks'
 import InventoryPage from './pages/InventoryPage'
 import StaffPage from './pages/StaffPage'
 import ShiftScheduler from './pages/ShiftScheduler'
+import Shifts from './pages/Shifts'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
@@ -28,6 +29,8 @@ function App() {
     content = <DailyTasks />
   } else if (page === 'staff') {
     content = <StaffPage />
+  } else if (page === 'shifts') {
+    content = <Shifts />
   } else if (page === 'schedule') {
     content = <ShiftScheduler />
   } else {
