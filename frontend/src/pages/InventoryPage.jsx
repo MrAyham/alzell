@@ -51,6 +51,7 @@ export default function InventoryPage() {
         onEdit={item => setEditItem(item)}
         onDelete={handleDelete}
         canDelete={role === 'King'}
+        lowThreshold={5}
       />
       <button className="border border-[#800000] px-2 py-1" onClick={() => setShowAdd(true)}>
         Add Item

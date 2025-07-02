@@ -1,15 +1,25 @@
 import { useState } from 'react'
 
 export default function AddInventoryModal({ onClose, onAdd }) {
-  const [form, setForm] = useState({ item_name: '', quantity: 0, unit: '' })
+  const [form, setForm] = useState({
+    item_name: '',
+    quantity: 0,
+    unit: '',
+    low_stock_alert: false
+  })
 
   function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    setForm({ ...form, [e.target.name]: value })
   }
 
   function handleSubmit(e) {
     e.preventDefault()
-    onAdd({ ...form, quantity: Number(form.quantity) })
+    onAdd({
+      ...form,
+      quantity: Number(form.quantity),
+      low_stock_alert: Boolean(form.low_stock_alert)
+    })
   }
 
   return (
@@ -38,6 +48,15 @@ export default function AddInventoryModal({ onClose, onAdd }) {
           value={form.unit}
           onChange={handleChange}
         />
+        <label className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            name="low_stock_alert"
+            checked={form.low_stock_alert}
+            onChange={handleChange}
+          />
+          <span>Enable Low Stock Alert</span>
+        </label>
         <div className="space-x-2 text-right">
           <button type="submit" className="border border-[#800000] px-2 py-1">Save</button>
           <button type="button" className="border border-[#800000] px-2 py-1" onClick={onClose}>Cancel</button>
