@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase'
+import {
+  getReports,
+  addReport as addReportApi,
+  updateReport,
+  deleteReport,
+} from '../supabase/dailyReports'
 import { useRole } from '../RoleContext'
 
 export default function Reports({ onBack }) {
@@ -9,6 +15,14 @@ export default function Reports({ onBack }) {
   const [showForm, setShowForm] = useState(false)
   const [formData, setFormData] = useState({
     staff_id: '',
+    date: new Date().toISOString().split('T')[0],
+    shift: '',
+    notes: '',
+    issues: ''
+  })
+  const [editItem, setEditItem] = useState(null)
+  const [editData, setEditData] = useState({
+    staff_id: '',
     date: '',
     shift: '',
     notes: '',
@@ -16,11 +30,12 @@ export default function Reports({ onBack }) {
   })
 
   async function fetchReports() {
-    const { data } = await supabase
-      .from('daily_reports')
-      .select('id, date, shift, notes, issues, staff_id, staff(name)')
-      .order('date', { ascending: false })
-    setReports(data || [])
+    try {
+      const data = await getReports()
+      setReports(data)
+    } catch (err) {
+      console.error('Failed to fetch reports', err)
+    }
   }
 
   async function fetchStaff() {
@@ -39,21 +54,60 @@ export default function Reports({ onBack }) {
       alert('Please fill in all fields')
       return
     }
-    const { error } = await supabase.from('daily_reports').insert({
-      staff_id: formData.staff_id,
-      date: formData.date,
-      shift: formData.shift,
-      notes: formData.notes,
-      issues: formData.issues
-    })
-    if (error) {
-      alert('Failed to save report')
+    try {
+      await addReportApi({
+        staff_id: formData.staff_id,
+        date: formData.date,
+        shift: formData.shift,
+        notes: formData.notes,
+        issues: formData.issues,
+      })
+    } catch (err) {
+      alert(err.message || 'Failed to save report')
       return
     }
     alert('Report saved successfully')
-    setFormData({ staff_id: '', date: '', shift: '', notes: '', issues: '' })
+    setFormData({
+      staff_id: '',
+      date: new Date().toISOString().split('T')[0],
+      shift: '',
+      notes: '',
+      issues: '',
+    })
     setShowForm(false)
     fetchReports()
+  }
+
+  function startEdit(r) {
+    setEditItem(r)
+    setEditData({
+      staff_id: r.staff_id,
+      date: r.date,
+      shift: r.shift,
+      notes: r.notes || '',
+      issues: r.issues || '',
+    })
+  }
+
+  async function saveEdit(e) {
+    e.preventDefault()
+    try {
+      await updateReport(editItem.id, editData)
+      setEditItem(null)
+      fetchReports()
+    } catch (err) {
+      alert('Failed to update report')
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!confirm('Delete this report?')) return
+    try {
+      await deleteReport(id)
+      fetchReports()
+    } catch (err) {
+      alert('Failed to delete report')
+    }
   }
 
   return (
@@ -67,6 +121,8 @@ export default function Reports({ onBack }) {
             <th className='p-2'>Shift</th>
             <th className='p-2'>Notes</th>
             <th className='p-2'>Issues</th>
+            <th className='p-2'>Created</th>
+            {role !== 'Worker' && <th className='p-2'>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -77,12 +133,76 @@ export default function Reports({ onBack }) {
               <td className='p-2'>{r.shift}</td>
               <td className='p-2'>{r.notes}</td>
               <td className='p-2'>{r.issues}</td>
+              <td className='p-2'>{new Date(r.created_at).toLocaleString()}</td>
+              {role !== 'Worker' && (
+                <td className='p-2 space-x-1'>
+                  <button className='border px-1' onClick={() => startEdit(r)}>
+                    ✏️
+                  </button>
+                  <button className='border px-1' onClick={() => handleDelete(r.id)}>
+                    ❌
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
       {role !== 'Worker' && (
-        showForm ? (
+        editItem ? (
+          <form onSubmit={saveEdit} className='space-y-2'>
+          <select
+            className='border p-1 w-full text-black'
+            value={editData.staff_id}
+            onChange={e => setEditData({ ...editData, staff_id: e.target.value })}
+            required
+          >
+            <option value=''>Select Staff</option>
+            {staff.map(s => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+          <input
+            type='date'
+            className='border p-1 w-full text-black'
+            value={editData.date}
+            onChange={e => setEditData({ ...editData, date: e.target.value })}
+            required
+          />
+          <select
+            className='border p-1 w-full text-black'
+            value={editData.shift}
+            onChange={e => setEditData({ ...editData, shift: e.target.value })}
+            required
+          >
+            <option value=''>Select Shift</option>
+            <option value='Morning'>Morning</option>
+            <option value='Evening'>Evening</option>
+            <option value='Overnight'>Overnight</option>
+          </select>
+          <textarea
+            className='border p-1 w-full text-black'
+            placeholder='Notes'
+            value={editData.notes}
+            onChange={e => setEditData({ ...editData, notes: e.target.value })}
+            required
+          />
+          <textarea
+            className='border p-1 w-full text-black'
+            placeholder='Issues'
+            value={editData.issues}
+            onChange={e => setEditData({ ...editData, issues: e.target.value })}
+          />
+          <div className='space-x-2'>
+            <button type='submit' className='border px-2 py-1'>Save</button>
+            <button type='button' className='border px-2 py-1' onClick={() => setEditItem(null)}>
+              Cancel
+            </button>
+          </div>
+        </form>
+        ) : showForm ? (
           <form onSubmit={addReport} className='space-y-2'>
           <select
             className='border p-1 w-full text-black'
@@ -112,7 +232,8 @@ export default function Reports({ onBack }) {
           >
             <option value=''>Select Shift</option>
             <option value='Morning'>Morning</option>
-            <option value='Night'>Night</option>
+            <option value='Evening'>Evening</option>
+            <option value='Overnight'>Overnight</option>
           </select>
           <textarea
             className='border p-1 w-full text-black'
@@ -126,7 +247,6 @@ export default function Reports({ onBack }) {
             placeholder='Issues'
             value={formData.issues}
             onChange={e => setFormData({ ...formData, issues: e.target.value })}
-            required
           />
           <div className='space-x-2'>
             <button type='submit' className='border px-2 py-1'>Save</button>
