@@ -93,7 +93,7 @@ export default function Home({ onViewReports }) {
         </button>
       ))}
       <button className='border px-2 py-1' onClick={onViewReports}>
-        View Reports
+        View Daily Reports
       </button>
     </div>
   )

@@ -8,7 +8,7 @@ import {
 } from '../supabase/dailyReports'
 import { useRole } from '../RoleContext'
 
-export default function Reports({ onBack }) {
+export default function DailyReports({ onBack }) {
   const { role } = useRole()
   const [reports, setReports] = useState([])
   const [staff, setStaff] = useState([])
@@ -50,8 +50,8 @@ export default function Reports({ onBack }) {
 
   async function addReport(e) {
     e.preventDefault()
-    if (!formData.staff_id || !formData.date || !formData.shift || !formData.notes || !formData.issues) {
-      alert('Please fill in all fields')
+    if (!formData.staff_id || !formData.date || !formData.shift || !formData.notes) {
+      alert('Please fill in all required fields')
       return
     }
     try {
