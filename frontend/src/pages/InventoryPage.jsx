@@ -45,7 +45,7 @@ export default function InventoryPage() {
 
   return (
     <div className="space-y-4 text-[#FFD700]">
-      <h2 className="text-xl font-bold">Inventory</h2>
+      <h2 className="text-xl font-bold">Inventory Management</h2>
       <InventoryTable
         items={items}
         onEdit={item => setEditItem(item)}
@@ -54,7 +54,7 @@ export default function InventoryPage() {
         lowThreshold={5}
       />
       <button className="border border-[#800000] px-2 py-1" onClick={() => setShowAdd(true)}>
-        Add Item
+        Add Inventory Item
       </button>
       {showAdd && (
         <AddInventoryModal onClose={() => setShowAdd(false)} onAdd={handleAdd} />
