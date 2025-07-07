@@ -39,3 +39,20 @@ create table shifts_schedule (
   shift text,
   created_at timestamp default now()
 );
+
+create table upsell_items (
+  id uuid default uuid_generate_v4() primary key,
+  title text,
+  description text,
+  price float,
+  image_url text,
+  available boolean default true,
+  created_at timestamp default now()
+);
+
+create table daily_notes (
+  id uuid default uuid_generate_v4() primary key,
+  note text,
+  date date,
+  created_at timestamp default now()
+);
