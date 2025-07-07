@@ -3,7 +3,7 @@ create table staff (
   name text,
   role text,
   shift text,
-  status text,
+  status text default 'Active',
   created_at timestamp default now()
 );
 
