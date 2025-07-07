@@ -51,6 +51,22 @@ create table shifts_schedule (
   created_at timestamp default now()
 );
 
+ codex/add-upsell-center-page
+create table upsell_items (
+  id uuid default uuid_generate_v4() primary key,
+  title text,
+  description text,
+  price float,
+  image_url text,
+  available boolean default true,
+  created_at timestamp default now()
+);
+
+create table daily_notes (
+  id uuid default uuid_generate_v4() primary key,
+  note text,
+  date date,
+=======
  codex/create-and-link-offers-page
 create table offers (
   id uuid default uuid_generate_v4() primary key,
@@ -67,6 +83,7 @@ create table inventory (
   quantity integer not null,
   unit text,
   low_stock_alert boolean default false,
+ main
  main
   created_at timestamp default now()
 );
