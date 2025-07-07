@@ -8,6 +8,7 @@ import InventoryPage from './pages/InventoryPage'
 import StaffPage from './pages/StaffPage'
 import ShiftScheduler from './pages/ShiftScheduler'
 import Shifts from './pages/Shifts'
+import Offers from './pages/Offers'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
@@ -33,6 +34,8 @@ function App() {
     content = <Shifts />
   } else if (page === 'schedule') {
     content = <ShiftScheduler />
+  } else if (page === 'offers') {
+    content = <Offers />
   } else {
     content = <Home onViewReports={() => setPage('dailyReports')} />
   }
