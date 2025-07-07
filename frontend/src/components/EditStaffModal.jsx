@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react'
 import { updateStaff } from '../supabase/staff'
 
 export default function EditStaffModal({ isOpen, staff, onClose, onUpdated }) {
-  const [form, setForm] = useState({ name: '', role: 'Chef', shift: 'Morning', status: 'Active' })
+  const [form, setForm] = useState({ name: '', role: 'Chef', shift: '', status: 'Active' })
 
-  const roles = ['Chef', 'Cashier', 'Server']
-  const shifts = ['Morning', 'Evening']
-  const statuses = ['Active', 'On Leave', 'Terminated']
+  const roles = ['Chef', 'Cashier', 'Manager']
+  const statuses = ['Active', 'Inactive', 'Problematic']
 
   useEffect(() => {
     if (staff) {
@@ -58,16 +57,13 @@ export default function EditStaffModal({ isOpen, staff, onClose, onUpdated }) {
               <option key={r} value={r}>{r}</option>
             ))}
           </select>
-          <select
+          <input
             className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
+            placeholder="Shift (e.g. 11am-5pm)"
             name="shift"
             value={form.shift}
             onChange={handleChange}
-          >
-            {shifts.map(s => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+          />
           <select
             className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
             name="status"

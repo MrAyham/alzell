@@ -11,7 +11,7 @@ export default function StaffTable() {
   const [showAdd, setShowAdd] = useState(false)
   const [editItem, setEditItem] = useState(null)
 
-  const roleIcons = { Chef: '🍳', Cashier: '💰', Server: '🍽️' }
+  const roleIcons = { Chef: '🍳', Cashier: '💰', Manager: '👑', Server: '🍽️' }
 
   useEffect(() => {
     fetchStaff()
@@ -55,7 +55,7 @@ export default function StaffTable() {
           className="border border-[#800000] px-2 py-1"
           onClick={() => setShowAdd(true)}
         >
-          Add Staff
+          Add New Staff
         </button>
       </div>
       <table className="w-full text-left border border-[#800000]">
