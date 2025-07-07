@@ -51,6 +51,25 @@ create table shifts_schedule (
   created_at timestamp default now()
 );
 
+ codex/create-orders-and-order_items-tables-in-supabase
+-- codex/create-orders-tables
+create table orders (
+  id uuid default uuid_generate_v4() primary key,
+  order_number serial,
+  staff_id uuid references staff(id),
+  shift text,
+  status text,
+  notes text,
+  created_at timestamp default now()
+);
+
+create table order_items (
+  id uuid default uuid_generate_v4() primary key,
+  order_id uuid references orders(id),
+  menu_item_id uuid references menu_items(id),
+  quantity integer default 1,
+  special_request text
+=======
  codex/add-upsell-center-page
 create table upsell_items (
   id uuid default uuid_generate_v4() primary key,
@@ -86,4 +105,5 @@ create table inventory (
  main
  main
   created_at timestamp default now()
+ main
 );
