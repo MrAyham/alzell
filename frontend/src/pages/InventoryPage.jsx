@@ -10,6 +10,7 @@ export default function InventoryPage() {
   const [items, setItems] = useState([])
   const [showAdd, setShowAdd] = useState(false)
   const [editItem, setEditItem] = useState(null)
+  const [showLowOnly, setShowLowOnly] = useState(false)
 
   async function fetchData() {
     try {
@@ -43,18 +44,33 @@ export default function InventoryPage() {
     }
   }
 
+  const displayed = showLowOnly ? items.filter(i => i.low_stock_alert) : items
+
   return (
     <div className="space-y-4 text-[#FFD700]">
+ codex/build-inventory-management-page
       <h2 className="text-xl font-bold">Inventory</h2>
+      <label className="block">
+        <input
+          type="checkbox"
+          checked={showLowOnly}
+          onChange={e => setShowLowOnly(e.target.checked)}
+          className="mr-1"
+        />
+        Show Low Stock Only
+      </label>
+
+      <h2 className="text-xl font-bold">Inventory Management</h2>
+ main
       <InventoryTable
-        items={items}
+        items={displayed}
         onEdit={item => setEditItem(item)}
         onDelete={handleDelete}
         canDelete={role === 'King'}
         lowThreshold={5}
       />
       <button className="border border-[#800000] px-2 py-1" onClick={() => setShowAdd(true)}>
-        Add Item
+        Add Inventory Item
       </button>
       {showAdd && (
         <AddInventoryModal onClose={() => setShowAdd(false)} onAdd={handleAdd} />

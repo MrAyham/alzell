@@ -2,11 +2,10 @@ import { useState } from 'react'
 import { addStaff } from '../supabase/staff'
 
 export default function AddStaffModal({ isOpen, onClose, onAdded }) {
-  const [form, setForm] = useState({ name: '', role: 'Chef', shift: 'Morning', status: 'Active' })
+  const [form, setForm] = useState({ name: '', role: 'Chef', shift: 'Morning' })
 
   const roles = ['Chef', 'Cashier', 'Server']
   const shifts = ['Morning', 'Evening']
-  const statuses = ['Active', 'On Leave', 'Terminated']
 
   if (!isOpen) return null
 
@@ -15,15 +14,15 @@ export default function AddStaffModal({ isOpen, onClose, onAdded }) {
   }
 
   function handleCancel() {
-    setForm({ name: '', role: 'Chef', shift: 'Morning', status: 'Active' })
+    setForm({ name: '', role: 'Chef', shift: 'Morning' })
     onClose()
   }
 
   async function handleSubmit(e) {
     e.preventDefault()
-    await addStaff(form)
+    await addStaff({ ...form, status: 'Active' })
     onAdded()
-    setForm({ name: '', role: 'Chef', shift: 'Morning', status: 'Active' })
+    setForm({ name: '', role: 'Chef', shift: 'Morning' })
     onClose()
   }
 
@@ -56,16 +55,6 @@ export default function AddStaffModal({ isOpen, onClose, onAdded }) {
             onChange={handleChange}
           >
             {shifts.map(s => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-          <select
-            className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
-            name="status"
-            value={form.status}
-            onChange={handleChange}
-          >
-            {statuses.map(s => (
               <option key={s} value={s}>{s}</option>
             ))}
           </select>
