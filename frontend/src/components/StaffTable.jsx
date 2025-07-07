@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import { getStaff, deleteStaff } from '../supabase/staff'
 import AddStaffModal from './AddStaffModal'
 import EditStaffModal from './EditStaffModal'
@@ -7,7 +7,7 @@ import { useRole } from '../RoleContext'
 export default function StaffTable() {
   const { role } = useRole()
   const [staff, setStaff] = useState([])
-  const [filters, setFilters] = useState({ shift: '', role: '', status: '' })
+  const [filters, setFilters] = useState({ status: '' })
   const [showAdd, setShowAdd] = useState(false)
   const [editItem, setEditItem] = useState(null)
 
@@ -28,33 +28,19 @@ export default function StaffTable() {
     fetchStaff()
   }
 
-  const roles = Array.from(new Set(staff.map(s => s.role).filter(Boolean)))
-  const shifts = Array.from(new Set(staff.map(s => s.shift).filter(Boolean)))
   const statuses = Array.from(new Set(staff.map(s => s.status).filter(Boolean)))
+
+  const grouped = staff.reduce((acc, m) => {
+    const sh = m.shift || 'Unassigned'
+    if (!acc[sh]) acc[sh] = []
+    acc[sh].push(m)
+    return acc
+  }, {})
+  const shiftNames = Object.keys(grouped).sort()
 
   return (
     <div className="space-y-2">
       <div className="space-x-2">
-        <select
-          className="border border-[#800000] bg-black text-[#FFD700] p-1"
-          value={filters.shift}
-          onChange={e => setFilters({ ...filters, shift: e.target.value })}
-        >
-          <option value="">All Shifts</option>
-          {shifts.map(sh => (
-            <option key={sh} value={sh}>{sh}</option>
-          ))}
-        </select>
-        <select
-          className="border border-[#800000] bg-black text-[#FFD700] p-1"
-          value={filters.role}
-          onChange={e => setFilters({ ...filters, role: e.target.value })}
-        >
-          <option value="">All Roles</option>
-          {roles.map(r => (
-            <option key={r} value={r}>{r}</option>
-          ))}
-        </select>
         <select
           className="border border-[#800000] bg-black text-[#FFD700] p-1"
           value={filters.status}
@@ -84,33 +70,40 @@ export default function StaffTable() {
           </tr>
         </thead>
         <tbody>
-          {staff.map(s => (
-            <tr key={s.id} className="border-b border-[#800000]">
-              <td className="p-2">{s.name}</td>
-              <td className="p-2 flex items-center space-x-1">
-                <span>{roleIcons[s.role] || '👤'}</span>
-                <span>{s.role}</span>
-              </td>
-              <td className="p-2">{s.shift}</td>
-              <td className="p-2">{s.status}</td>
-              <td className="p-2">{new Date(s.created_at).toLocaleString()}</td>
-              <td className="p-2 space-x-1">
-                <button
-                  className="border border-[#800000] px-1"
-                  onClick={() => setEditItem(s)}
-                >
-                  Edit
-                </button>
-                {role === 'King' && (
-                  <button
-                    className="border border-[#800000] px-1"
-                    onClick={() => handleDelete(s.id)}
-                  >
-                    Delete
-                  </button>
-                )}
-              </td>
-            </tr>
+          {shiftNames.map(shift => (
+            <Fragment key={shift}>
+              <tr className="bg-gray-700">
+                <td colSpan="6" className="p-2 font-bold">{shift}</td>
+              </tr>
+              {grouped[shift].map(s => (
+                <tr key={s.id} className="border-b border-[#800000]">
+                  <td className="p-2">{s.name}</td>
+                  <td className="p-2 flex items-center space-x-1">
+                    <span>{roleIcons[s.role] || '👤'}</span>
+                    <span>{s.role}</span>
+                  </td>
+                  <td className="p-2">{s.shift}</td>
+                  <td className="p-2">{s.status}</td>
+                  <td className="p-2">{new Date(s.created_at).toLocaleString()}</td>
+                  <td className="p-2 space-x-1">
+                    <button
+                      className="border border-[#800000] px-1"
+                      onClick={() => setEditItem(s)}
+                    >
+                      Edit
+                    </button>
+                    {role === 'King' && (
+                      <button
+                        className="border border-[#800000] px-1"
+                        onClick={() => handleDelete(s.id)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </Fragment>
           ))}
         </tbody>
       </table>
