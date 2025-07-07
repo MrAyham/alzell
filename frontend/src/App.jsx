@@ -8,11 +8,13 @@ import InventoryPage from './pages/inventory/InventoryPage'
 import StaffPage from './pages/StaffPage'
 import ShiftScheduler from './pages/ShiftScheduler'
 import Shifts from './pages/Shifts'
- codex/add-upsell-center-page
 import UpsellCenter from './pages/UpsellCenter'
-=======
 import Offers from './pages/Offers'
- main
+import OrdersPage from './pages/OrdersPage'
+import NotificationsPage from './pages/NotificationsPage'
+import AIAssistant from './pages/AIAssistant'
+import KingControlCenter from './pages/KingControlCenter'
+import ConfigSettings from './pages/ConfigSettings'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
@@ -38,13 +40,20 @@ function App() {
     content = <Shifts />
   } else if (page === 'schedule') {
     content = <ShiftScheduler />
- codex/add-upsell-center-page
   } else if (page === 'upsell') {
     content = <UpsellCenter />
-=======
   } else if (page === 'offers') {
     content = <Offers />
- main
+  } else if (page === 'orders') {
+    content = <OrdersPage />
+  } else if (page === 'notifications') {
+    content = <NotificationsPage />
+  } else if (page === 'ai') {
+    content = <AIAssistant />
+  } else if (page === 'king-control') {
+    content = <KingControlCenter />
+  } else if (page === 'config') {
+    content = <ConfigSettings />
   } else {
     content = <Home onViewReports={() => setPage('dailyReports')} />
   }

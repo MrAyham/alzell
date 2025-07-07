@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { exportToCsv } from '../utils/export'
 import { supabase } from '../supabase'
 import {
   getReports,
@@ -113,6 +114,9 @@ export default function DailyReports({ onBack }) {
   return (
     <div className='space-y-4'>
       <h2 className='text-xl font-bold'>Daily Reports</h2>
+      <button className='border border-[#800000] px-2 py-1 mb-2' onClick={() => exportToCsv('reports.csv', reports)}>
+        Export CSV
+      </button>
       <table className='w-full text-left border'>
         <thead>
           <tr className='border-b'>

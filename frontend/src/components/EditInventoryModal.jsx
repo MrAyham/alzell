@@ -15,12 +15,8 @@ export default function EditInventoryModal({ item, onClose, onSave }) {
     e.preventDefault()
     onSave({
       ...form,
- codex/build-inventory-management-page
       quantity: Number(form.quantity),
       low_stock_alert: Number(form.quantity) < 5
-
-      quantity: Number(form.quantity)
- main
     })
   }
 

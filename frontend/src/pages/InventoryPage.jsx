@@ -4,6 +4,7 @@ import InventoryTable from '../components/InventoryTable'
 import AddInventoryModal from '../components/AddInventoryModal'
 import EditInventoryModal from '../components/EditInventoryModal'
 import { getInventory, addItem, updateItem, deleteItem } from '../supabase/inventory'
+import { exportToCsv } from '../utils/export'
 
 export default function InventoryPage() {
   const { role } = useRole()
@@ -48,7 +49,6 @@ export default function InventoryPage() {
 
   return (
     <div className="space-y-4 text-[#FFD700]">
- codex/build-inventory-management-page
       <h2 className="text-xl font-bold">Inventory</h2>
       <label className="block">
         <input
@@ -69,9 +69,14 @@ export default function InventoryPage() {
         canDelete={role === 'King'}
         lowThreshold={5}
       />
-      <button className="border border-[#800000] px-2 py-1" onClick={() => setShowAdd(true)}>
-        Add Inventory Item
-      </button>
+      <div className="space-x-2">
+        <button className="border border-[#800000] px-2 py-1" onClick={() => setShowAdd(true)}>
+          Add Inventory Item
+        </button>
+        <button className="border border-[#800000] px-2 py-1" onClick={() => exportToCsv('inventory.csv', items)}>
+          Export CSV
+        </button>
+      </div>
       {showAdd && (
         <AddInventoryModal onClose={() => setShowAdd(false)} onAdd={handleAdd} />
       )}

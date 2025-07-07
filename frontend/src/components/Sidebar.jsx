@@ -26,18 +26,31 @@ export default function Sidebar({ onNavigate }) {
       <button className="block" onClick={() => onNavigate('offers')}>
         Offers
       </button>
+      <button className="block" onClick={() => onNavigate('orders')}>
+        Orders
+      </button>
+      <button className="block" onClick={() => onNavigate('notifications')}>
+        Notifications
+      </button>
+      <button className="block" onClick={() => onNavigate('ai')}>
+        AI Assistant
+      </button>
       <button className="block" onClick={() => onNavigate('alerts')}>
         Alerts
       </button>
       <button className="block" onClick={() => onNavigate('tasks')}>
         Tasks
       </button>
-      <button className="block" onClick={() => onNavigate('upsell')}>
-        Upsell Center
-      </button>
-      {role === 'King' && (
-        <button className="block" onClick={() => onNavigate('king')}>Admin Panel</button>
-      )}
+  <button className="block" onClick={() => onNavigate('upsell')}>
+    Upsell Center
+  </button>
+  {role === 'King' && (
+        <>
+          <button className="block" onClick={() => onNavigate('king')}>Admin Panel</button>
+          <button className="block" onClick={() => onNavigate('king-control')}>King Control</button>
+          <button className="block" onClick={() => onNavigate('config')}>Config</button>
+        </>
+  )}
     </aside>
   )
 }
