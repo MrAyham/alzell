@@ -10,6 +10,7 @@ export default function InventoryPage() {
   const [items, setItems] = useState([])
   const [showAdd, setShowAdd] = useState(false)
   const [editItem, setEditItem] = useState(null)
+  const [showLowOnly, setShowLowOnly] = useState(false)
 
   async function fetchData() {
     try {
@@ -43,11 +44,22 @@ export default function InventoryPage() {
     }
   }
 
+  const displayed = showLowOnly ? items.filter(i => i.low_stock_alert) : items
+
   return (
     <div className="space-y-4 text-[#FFD700]">
       <h2 className="text-xl font-bold">Inventory</h2>
+      <label className="block">
+        <input
+          type="checkbox"
+          checked={showLowOnly}
+          onChange={e => setShowLowOnly(e.target.checked)}
+          className="mr-1"
+        />
+        Show Low Stock Only
+      </label>
       <InventoryTable
-        items={items}
+        items={displayed}
         onEdit={item => setEditItem(item)}
         onDelete={handleDelete}
         canDelete={role === 'King'}

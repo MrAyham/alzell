@@ -10,12 +10,20 @@ export async function getInventory() {
 }
 
 export async function addItem(item) {
-  const { error } = await supabase.from('inventory').insert(item)
+  const record = {
+    ...item,
+    low_stock_alert: item.quantity < 5
+  }
+  const { error } = await supabase.from('inventory').insert(record)
   if (error) throw error
 }
 
 export async function updateItem(id, data) {
-  const { error } = await supabase.from('inventory').update(data).eq('id', id)
+  const record = {
+    ...data,
+    low_stock_alert: data.quantity < 5
+  }
+  const { error } = await supabase.from('inventory').update(record).eq('id', id)
   if (error) throw error
 }
 
