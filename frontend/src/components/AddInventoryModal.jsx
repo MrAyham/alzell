@@ -4,12 +4,11 @@ export default function AddInventoryModal({ onClose, onAdd }) {
   const [form, setForm] = useState({
     item_name: '',
     quantity: 0,
-    unit: '',
-    low_stock_alert: false
+    unit: ''
   })
 
   function handleChange(e) {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    const value = e.target.value
     setForm({ ...form, [e.target.name]: value })
   }
 
@@ -17,8 +16,12 @@ export default function AddInventoryModal({ onClose, onAdd }) {
     e.preventDefault()
     onAdd({
       ...form,
+ codex/build-inventory-management-page
       quantity: Number(form.quantity),
-      low_stock_alert: Boolean(form.low_stock_alert)
+      low_stock_alert: Number(form.quantity) < 5
+
+      quantity: Number(form.quantity)
+ main
     })
   }
 
@@ -48,15 +51,6 @@ export default function AddInventoryModal({ onClose, onAdd }) {
           value={form.unit}
           onChange={handleChange}
         />
-        <label className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            name="low_stock_alert"
-            checked={form.low_stock_alert}
-            onChange={handleChange}
-          />
-          <span>Enable Low Stock Alert</span>
-        </label>
         <div className="space-x-2 text-right">
           <button type="submit" className="border border-[#800000] px-2 py-1">Save</button>
           <button type="button" className="border border-[#800000] px-2 py-1" onClick={onClose}>Cancel</button>
