@@ -8,6 +8,11 @@ import InventoryPage from './pages/InventoryPage'
 import StaffPage from './pages/StaffPage'
 import ShiftScheduler from './pages/ShiftScheduler'
 import Shifts from './pages/Shifts'
+ codex/add-upsell-center-page
+import UpsellCenter from './pages/UpsellCenter'
+=======
+import Offers from './pages/Offers'
+ main
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
@@ -33,6 +38,13 @@ function App() {
     content = <Shifts />
   } else if (page === 'schedule') {
     content = <ShiftScheduler />
+ codex/add-upsell-center-page
+  } else if (page === 'upsell') {
+    content = <UpsellCenter />
+=======
+  } else if (page === 'offers') {
+    content = <Offers />
+ main
   } else {
     content = <Home onViewReports={() => setPage('dailyReports')} />
   }
