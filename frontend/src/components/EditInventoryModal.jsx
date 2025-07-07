@@ -7,7 +7,7 @@ export default function EditInventoryModal({ item, onClose, onSave }) {
   })
 
   function handleChange(e) {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    const value = e.target.value
     setForm({ ...form, [e.target.name]: value })
   }
 
@@ -15,7 +15,12 @@ export default function EditInventoryModal({ item, onClose, onSave }) {
     e.preventDefault()
     onSave({
       ...form,
+ codex/build-inventory-management-page
+      quantity: Number(form.quantity),
+      low_stock_alert: Number(form.quantity) < 5
+
       quantity: Number(form.quantity)
+ main
     })
   }
 

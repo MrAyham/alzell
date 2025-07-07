@@ -29,7 +29,7 @@ export default function InventoryTable({
             </td>
             <td className="p-2">{item.quantity}</td>
             <td className="p-2">{item.unit}</td>
-            <td className="p-2">{item.low_stock_alert ? '✅' : '❌'}</td>
+            <td className="p-2">{item.low_stock_alert ? 'Low' : 'OK'}</td>
             <td className="p-2">{new Date(item.created_at).toLocaleString()}</td>
             <td className="p-2 space-x-1">
               <button
