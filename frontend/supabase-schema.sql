@@ -3,7 +3,7 @@ create table staff (
   name text,
   role text,
   shift text,
-  status text,
+  status text default 'Active',
   created_at timestamp default now()
 );
 
@@ -17,6 +17,14 @@ create table daily_reports (
   created_at timestamp default now()
 );
 
+ codex/build-inventory-management-page
+=======
+create table dismissed_alerts (
+  id uuid default uuid_generate_v4() primary key,
+  message text
+);
+
+ main
 create table daily_tasks (
   id uuid default uuid_generate_v4() primary key,
   task text,

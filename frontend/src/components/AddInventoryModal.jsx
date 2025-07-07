@@ -16,8 +16,12 @@ export default function AddInventoryModal({ onClose, onAdd }) {
     e.preventDefault()
     onAdd({
       ...form,
+ codex/build-inventory-management-page
       quantity: Number(form.quantity),
       low_stock_alert: Number(form.quantity) < 5
+
+      quantity: Number(form.quantity)
+ main
     })
   }
 
