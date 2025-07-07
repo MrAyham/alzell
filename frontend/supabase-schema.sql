@@ -17,6 +17,14 @@ create table daily_reports (
   created_at timestamp default now()
 );
 
+ codex/create-and-link-offers-page
+create table dismissed_alerts (
+  id uuid default uuid_generate_v4() primary key,
+  message text,
+  created_at timestamp default now()
+);
+
+=======
  codex/build-inventory-management-page
 =======
 create table dismissed_alerts (
@@ -24,6 +32,7 @@ create table dismissed_alerts (
   message text
 );
 
+ main
  main
 create table daily_tasks (
   id uuid default uuid_generate_v4() primary key,
@@ -42,11 +51,22 @@ create table shifts_schedule (
   created_at timestamp default now()
 );
 
+ codex/create-and-link-offers-page
+create table offers (
+  id uuid default uuid_generate_v4() primary key,
+  title text not null,
+  description text,
+  discount_percent integer,
+  valid_from date,
+  valid_to date,
+  is_active boolean default true,
+=======
 create table inventory (
   id uuid default uuid_generate_v4() primary key,
   item_name text not null,
   quantity integer not null,
   unit text,
   low_stock_alert boolean default false,
+ main
   created_at timestamp default now()
 );
