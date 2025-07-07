@@ -3,6 +3,7 @@ import { getStaff, deleteStaff } from '../supabase/staff'
 import AddStaffModal from './AddStaffModal'
 import EditStaffModal from './EditStaffModal'
 import { useRole } from '../RoleContext'
+import { exportToCsv } from '../utils/export'
 
 export default function StaffTable() {
   const { role } = useRole()
@@ -56,6 +57,12 @@ export default function StaffTable() {
           onClick={() => setShowAdd(true)}
         >
           Add New Staff
+        </button>
+        <button
+          className="border border-[#800000] px-2 py-1"
+          onClick={() => exportToCsv('staff.csv', staff)}
+        >
+          Export CSV
         </button>
       </div>
       <table className="w-full text-left border border-[#800000]">
