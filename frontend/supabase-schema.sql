@@ -9,8 +9,8 @@ create table staff (
 
 create table daily_reports (
   id uuid default uuid_generate_v4() primary key,
-  date date,
-  shift text,
+  date date not null,
+  shift text not null,
   staff_id uuid references staff(id),
   notes text,
   issues text,

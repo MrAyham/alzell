@@ -137,10 +137,10 @@ export default function DailyReports({ onBack }) {
               {role !== 'Worker' && (
                 <td className='p-2 space-x-1'>
                   <button className='border px-1' onClick={() => startEdit(r)}>
-                    ✏️
+                    ✏️ Edit Report
                   </button>
                   <button className='border px-1' onClick={() => handleDelete(r.id)}>
-                    ❌
+                    🗑️ Delete Report
                   </button>
                 </td>
               )}
@@ -257,7 +257,7 @@ export default function DailyReports({ onBack }) {
         </form>
       ) : (
         <button className='border px-2 py-1' onClick={() => setShowForm(true)}>
-          Add Report
+          ➕ Add Daily Report
         </button>
       ))}
       <button className='border px-2 py-1' onClick={onBack}>Back</button>
