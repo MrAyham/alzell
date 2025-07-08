@@ -1,6 +1,8 @@
 import { useUser } from '@supabase/auth-helpers-react';
 import { createContext, useContext } from 'react';
 
+import { createContext } from 'react';
+
 interface RoleContextType {
   role: string;
   setRole: (role: string) => void;
