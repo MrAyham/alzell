@@ -1,8 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
-
-
-interface RoleContextType {
+interface; {
   role: string;
   setRole: (role: string) => void;
 }
