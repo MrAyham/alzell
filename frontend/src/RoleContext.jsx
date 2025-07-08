@@ -6,7 +6,7 @@ interface (RoleContextType);
 
     RoleContext = createContext<RoleContextType | undefined>(undefined);
 
-export const RoleProvider = ({ children }); { children: ReactNode } => {
+export const RoleProvider = ({ children }); { children: ReactNode }  {
   const [role, setRole] = useState('anon');
 
   return (
@@ -16,7 +16,7 @@ export const RoleProvider = ({ children }); { children: ReactNode } => {
   );
 };
 
-export const useRole = (): RoleContextType => {
+export const useRole = (): RoleContextType  {
   const context = useContext(RoleContext);
   if (!context) {
     throw new Error('useRole must be used within a RoleProvider');
