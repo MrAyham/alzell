@@ -33,18 +33,18 @@ export default function AddStaffModal({ isOpen, onClose, onAdded }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-gray-800 p-4 rounded space-y-2 w-72">
-        <h3 className="text-lg text-[#FFD700]">Add Staff</h3>
+      <div className="card-royal space-y-2 w-72">
+        <h3 className="text-lg text-gold">Add Staff</h3>
         <form onSubmit={handleSubmit} className="space-y-2">
           <input
-            className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
+            className="border border-gold bg-dark text-gold p-1 w-full"
             placeholder="Name"
             name="name"
             value={form.name}
             onChange={handleChange}
           />
           <select
-            className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
+            className="border border-gold bg-dark text-gold p-1 w-full"
             name="role"
             value={form.role}
             onChange={handleChange}
@@ -54,14 +54,14 @@ export default function AddStaffModal({ isOpen, onClose, onAdded }) {
             ))}
           </select>
           <input
-            className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
+            className="border border-gold bg-dark text-gold p-1 w-full"
             placeholder="Shift (e.g. 11am-5pm)"
             name="shift"
             value={form.shift}
             onChange={handleChange}
           />
           <select
-            className="border border-[#800000] bg-black text-[#FFD700] p-1 w-full"
+            className="border border-gold bg-dark text-gold p-1 w-full"
             name="status"
             value={form.status}
             onChange={handleChange}
@@ -71,8 +71,8 @@ export default function AddStaffModal({ isOpen, onClose, onAdded }) {
             ))}
           </select>
           <div className="space-x-2">
-            <button type="submit" className="border border-[#800000] px-2 py-1">Save</button>
-            <button type="button" className="border border-[#800000] px-2 py-1" onClick={handleCancel}>
+            <button type="submit" className="btn-royal">Save</button>
+            <button type="button" className="btn-royal" onClick={handleCancel}>
               Cancel
             </button>
           </div>

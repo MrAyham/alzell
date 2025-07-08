@@ -1,3 +1,9 @@
+create table users (
+  id uuid primary key references auth.users(id),
+  role text default 'staff'
+);
+-- policies will limit insert/select/update based on role value
+
 create table staff (
   id uuid default uuid_generate_v4() primary key,
   name text,

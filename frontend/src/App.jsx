@@ -18,10 +18,21 @@ import ConfigSettings from './pages/ConfigSettings'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
+import { useAuth } from './hooks/useAuth'
+import Login from './pages/login'
+import Register from './pages/register'
 
 function App() {
   const { role } = useRole()
+  const { user } = useAuth()
   const [page, setPage] = useState('home')
+
+  if (!user) {
+    if (location.hash === '#register') {
+      return <Register />
+    }
+    return <Login />
+  }
 
   let content
   if (role === 'King' && page === 'king') {
