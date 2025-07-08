@@ -1,30 +1,33 @@
-import { createContext, useContext, useEffect, useState } from 'react'
-import { useAuth } from './hooks/useAuth'
+import { useUser } from '@supabase/auth-helpers-react';
+import { createContext, useContext } from 'react';
 
-export const RoleContext = createContext({ role: null, name: null })
-
-export function RoleProvider({ children }) {
-  const { user } = useAuth()
-  const [role, setRole] = useState(null)
-  const [name, setName] = useState(null)
-
-  useEffect(() => {
-    if (user) {
-      setRole((user as any).user_metadata?.role || 'Staff')
-      setName(user.email)
-    } else {
-      setRole(null)
-      setName(null)
-    }
-  }, [user])
-
-  return (
-    <RoleContext.Provider value={{ role, name }}>
-      {children}
-    </RoleContext.Provider>
-  )
+interface RoleContextType {
+  role: string;
+  setRole: (role: string) => void;
 }
 
+const RoleContext = createContext<RoleContextType | undefined>(undefined);
+
 export function useRole() {
-  return useContext(RoleContext)
+  const context = useContext(RoleContext);
+  if (!context) {
+    throw new Error('useRole must be used within a RoleProvider');
+  }
+  return context;
+}
+
+export function RoleProvider({ children }: { children: React.ReactNode }) {
+  const user = useUser() as any;
+  const role = user?.user_metadata?.role || 'Staff';
+
+  const setRole = (newRole: string) => {
+    // You can implement role-changing logic here if needed
+    console.log('Changing role to:', newRole);
+  };
+
+  return (
+    <RoleContext.Provider value={{ role, setRole }}>
+      {children}
+    </RoleContext.Provider>
+  );
 }
