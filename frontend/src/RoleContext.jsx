@@ -1,11 +1,11 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
-interface; {
+interface (RoleContextType) {
   role: string;
   setRole: (role: string) => void;
 }
 
-const RoleContext = createContext; | undefined>(undefined);
+const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
 export const RoleProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState('anon');
