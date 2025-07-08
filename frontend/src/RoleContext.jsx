@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface (RoleContextType);
   role: string;
-  setRole: (role); string;  void;
+  setRole: (role); string;  void
 }
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
