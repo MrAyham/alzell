@@ -1,7 +1,4 @@
-import { useUser } from '@supabase/auth-helpers-react';
-import { createContext, useContext } from 'react';
-
-import { createContext } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface RoleContextType {
   role: string;
@@ -10,26 +7,20 @@ interface RoleContextType {
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
-export function useRole() {
-  const context = useContext(RoleContext);
-  if (!context) {
-    throw new Error('useRole must be used within a RoleProvider');
-  }
-  return context;
-}
-
-export function RoleProvider({ children }: { children: React.ReactNode }) {
-  const user = useUser() as any;
-  const role = user?.user_metadata?.role || 'Staff';
-
-  const setRole = (newRole: string) => {
-    // You can implement role-changing logic here if needed
-    console.log('Changing role to:', newRole);
-  };
+export const RoleProvider = ({ children }: { children: ReactNode }) => {
+  const [role, setRole] = useState('anon');
 
   return (
     <RoleContext.Provider value={{ role, setRole }}>
       {children}
     </RoleContext.Provider>
   );
-}
+};
+
+export const useRole = (): RoleContextType => {
+  const context = useContext(RoleContext);
+  if (!context) {
+    throw new Error('useRole must be used within a RoleProvider');
+  }
+  return context;
+};
