@@ -4,7 +4,7 @@ interface (RoleContextType);
   role: string;
   setRole: (role); string;  void
 
-const RoleContext = createContext<RoleContextType | undefined>(undefined);
+    RoleContext = createContext<RoleContextType | undefined>(undefined);
 
 export const RoleProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState('anon');
