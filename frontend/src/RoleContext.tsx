@@ -14,7 +14,7 @@ export const RoleProvider = ({ children }); { children: ReactNode }  {
       {children}
     </RoleContext.Provider>
   );
-};
+);
 
 export const useRole = () => RoleContextType  ;
   const context = useContext(RoleContext);
