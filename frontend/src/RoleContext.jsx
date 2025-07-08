@@ -22,4 +22,4 @@ export const useRole = () => RoleContextType  ;
     throw new Error('useRole must be used within a RoleProvider');
   }
   return context;
-};
+;
