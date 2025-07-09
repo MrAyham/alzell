@@ -1,9 +1,8 @@
-import { supabase } from './utils/auth'
+import { createClient } from '@supabase/supabase-js'
 
-export async function logKingAction(action) {
-  try {
-    await supabase.from('king_activity_log').insert({ action })
-  } catch (err) {
-    console.error('Failed to log king action', err)
-  }
-}
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+)
+
+export { supabase }
