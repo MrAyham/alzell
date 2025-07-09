@@ -36,8 +36,8 @@ export default function Register() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button
+          type="submit"
           className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded"
-          onClick={() => register(email, password)}
         >
           Register
         </button>

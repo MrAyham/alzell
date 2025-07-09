@@ -34,33 +34,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const register = async (email: string, password: string) => {
-    if (!email.includes('@') || !email.includes('.')) {
-      alert('Please enter a valid email address')
+    if (!email || !password) {
+      alert('❌ Please enter all fields')
       return
     }
 
-    if (password.length < 6) {
-      alert('Password must be at least 6 characters')
+    const { error } = await supabase.auth.signUp({ email, password })
+
+    if (error) {
+      alert(`❌ Failed to register: ${error.message}`)
       return
     }
 
-    try {
-      const { data, error } = await supabase.auth.signUp({ email, password })
-
-      if (error) {
-        console.error('❌ Registration Error:', error.message)
-        alert('❌ Failed to register: ' + error.message)
-        return
-      }
-
-      console.log('Registration response:', data)
-      alert(
-        '✅ Registration successful! Please check your email to verify your account.'
-      )
-    } catch (err) {
-      console.error('❌ Unexpected error:', err)
-      alert('❌ Something went wrong during registration.')
-    }
+    alert('✅ Registration successful! Please check your email to verify your account.')
   }
 
   const logout = async () => {
