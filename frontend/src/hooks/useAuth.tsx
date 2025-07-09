@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { supabase, signIn, signUp, signOut, onAuthStateChange } from '../utils/auth'
+import { supabase } from '../supabase'
+import { onAuthStateChange } from '../utils/auth'
 
 interface AuthContextProps {
   user: any
@@ -28,15 +29,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const login = async (email: string, password: string) => {
-    await signIn(email, password)
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) throw error
   }
 
   const register = async (email: string, password: string) => {
-    await signUp(email, password)
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+
+      if (error) {
+        console.error('❌ Registration Error:', error.message)
+        alert('❌ Failed to register: ' + error.message)
+        return
+      }
+
+      alert(
+        '✅ Registration successful! Please check your email to verify your account.'
+      )
+    } catch (err) {
+      console.error('❌ Unexpected error:', err)
+      alert('❌ Something went wrong during registration.')
+    }
   }
 
   const logout = async () => {
-    await signOut()
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
   }
 
   return (
