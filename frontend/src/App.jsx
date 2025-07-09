@@ -34,6 +34,10 @@ function App() {
     return <Login />
   }
 
+  if (!user.confirmed_at) {
+    return <p className='text-white'>Please verify your email to access the app.</p>
+  }
+
   let content
   if (role === 'King' && page === 'king') {
     content = <KingDashboard />
