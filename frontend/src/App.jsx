@@ -16,26 +16,17 @@ import AIAssistant from './pages/AIAssistant'
 import KingControlCenter from './pages/KingControlCenter'
 import ConfigSettings from './pages/ConfigSettings'
 import Sidebar from './components/Sidebar'
-import Header from './components/Header'
+import Navbar from './components/Navbar'
 import { useRole } from './RoleContext'
 import { useAuth } from './hooks/useAuth'
 import { KING_ID } from './constants'
-import Login from './pages/login'
-import Register from './pages/register'
 
 function App() {
   const { role } = useRole()
   const { user } = useAuth()
   const [page, setPage] = useState('home')
 
-  if (!user) {
-    if (location.hash === '#register') {
-      return <Register />
-    }
-    return <Login />
-  }
-
-  if (!user.confirmed_at) {
+  if (!user?.confirmed_at) {
     return <p className='text-white'>Please verify your email to access the app.</p>
   }
 
@@ -78,7 +69,7 @@ function App() {
     <div className='p-6 min-h-screen flex'>
       <Sidebar onNavigate={setPage} />
       <div className='flex-1'>
-        <Header />
+        <Navbar />
         {content}
       </div>
     </div>
