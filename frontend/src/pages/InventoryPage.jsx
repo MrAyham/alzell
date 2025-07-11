@@ -11,6 +11,7 @@ import { exportToCsv } from '../utils/export'
 export default function InventoryPage() {
   const { role } = useRole()
   const { user } = useAuth()
+  if (user === null) return <p className='text-white'>Loading...</p>
   const [items, setItems] = useState([])
   const [showAdd, setShowAdd] = useState(false)
   const [editItem, setEditItem] = useState(null)
