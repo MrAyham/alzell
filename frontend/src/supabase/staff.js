@@ -1,4 +1,4 @@
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 
 export async function getStaff(filters = {}) {
   let query = supabase.from('staff').select('*').order('created_at', { ascending: false })

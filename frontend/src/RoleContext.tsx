@@ -1,6 +1,6 @@
 // ========= src/context/RoleContext.tsx =========
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { supabase } from './supabase';
+import { supabase } from './lib/supabase';
 
 export interface RoleContextType {
   role: string;
@@ -64,11 +64,7 @@ export const useRole = (): RoleContextType => {
 
 // ========= src/hooks/useAuth.tsx =========
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { createClient, Session, User } from '@supabase/supabase-js';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { Session, User } from '@supabase/supabase-js';
 
 interface AuthContextType {
   user: User | null;
