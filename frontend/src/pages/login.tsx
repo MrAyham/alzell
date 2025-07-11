@@ -42,7 +42,17 @@ export default function Login() {
           Login
         </button>
         <p className="mt-2 text-sm">
-          No account? <a href="#register" className="text-gold underline" onClick={() => location.hash = 'register'}>Register</a>
+          No account?{' '}
+          <a
+            href="/register"
+            className="text-gold underline"
+            onClick={(e) => {
+              e.preventDefault()
+              navigate('/register')
+            }}
+          >
+            Register
+          </a>
         </p>
       </form>
     </div>

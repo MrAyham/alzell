@@ -21,17 +21,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data: session } = await supabase.auth.getSession()
       const authUser = session?.user
       if (authUser) {
-        const role = authUser.email === 'h.b.k.ayhm@gmail.com' ? 'king' : 'worker'
-        await supabase
+        const role =
+          authUser.email === 'ayham.elmandil@gmail.com' ? 'king' : 'worker'
+
+        const { data: existing } = await supabase
           .from('users')
-          .upsert(
-            {
-              id: authUser.id,
-              email: authUser.email,
-              role
-            },
-            { onConflict: ['email'] }
-          )
+          .select('id, role')
+          .eq('id', authUser.id)
+          .single()
+
+        if (!existing) {
+          await supabase.from('users').insert({
+            id: authUser.id,
+            email: authUser.email,
+            role
+          })
+        } else if (
+          !(existing.role === 'king' && authUser.email !== 'ayham.elmandil@gmail.com')
+        ) {
+          await supabase
+            .from('users')
+            .update({ role })
+            .eq('id', authUser.id)
+        }
       }
     } catch (err) {
       console.error('Failed to sync user', err)

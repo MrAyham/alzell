@@ -13,7 +13,7 @@ export default function Confirm() {
           { uid: user.id, email: user.email }
         ])
       }
-      window.location.replace('/')
+      window.location.replace('/dashboard')
     }
     finish()
   }, [])
