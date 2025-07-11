@@ -19,6 +19,7 @@ import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import { useRole } from './RoleContext'
 import { useAuth } from './hooks/useAuth'
+import { KING_ID } from './constants'
 import Login from './pages/login'
 import Register from './pages/register'
 
@@ -39,7 +40,7 @@ function App() {
   }
 
   let content
-  if (role === 'King' && page === 'king') {
+  if (user?.id === KING_ID && page === 'king') {
     content = <KingDashboard />
   } else if (page === 'dailyReports') {
     content = <DailyReports onBack={() => setPage('home')} />
