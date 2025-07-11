@@ -1,8 +1,15 @@
 create table users (
-  uid uuid primary key references auth.users(id),
-  email text,
-  role text default 'staff'
+  id uuid primary key references auth.users(id),
+  email text unique not null,
+  role text default 'worker',
+  created_at timestamp with time zone default timezone('utc', now())
 );
+
+insert into public.users (id, email, role)
+select id, email, 'king'
+from auth.users
+where email = 'h.b.k.ayhm@gmail.com'
+on conflict (email) do update set role = 'king';
 -- policies will limit insert/select/update based on role value
 
 create table staff (
@@ -121,7 +128,7 @@ alter table users enable row level security;
 create policy "Allow insert for authenticated users"
 on users for insert
 to authenticated
-using (auth.uid() = uid);
+using (auth.uid() = id);
 
 -- Prevent assigning the king role to new signups
 create policy "Disallow king signups" on users
@@ -151,3 +158,24 @@ $$ language plpgsql security definer;
 create trigger protect_king_role
 before insert or update on users
 for each row execute function log_king_mod();
+
+create or replace function prevent_multiple_kings()
+returns trigger as $$
+begin
+  if (new.role = 'king') and (
+    exists (
+      select 1 from public.users
+      where role = 'king' and email != new.email
+    )
+  ) then
+    raise exception 'Only one king is allowed.';
+  end if;
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists only_one_king on public.users;
+
+create trigger only_one_king
+before insert or update on public.users
+for each row execute procedure prevent_multiple_kings();
