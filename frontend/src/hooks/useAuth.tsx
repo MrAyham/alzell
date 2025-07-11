@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import { onAuthStateChange } from '../utils/auth'
 
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextProps | null>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null)
+  const navigate = useNavigate()
 
   async function syncAuthUser() {
     const { data: session } = await supabase.auth.getSession()
@@ -46,7 +48,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
+codex/sync-auth-user-with-users-table
     await syncAuthUser()
+=======
+    navigate('/dashboard')
+ main
   }
 
   const register = async (email: string, password: string) => {
@@ -65,11 +71,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await syncAuthUser()
 
     alert('✅ Registration successful! Please check your email to verify your account.')
+    navigate('/dashboard')
   }
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
+    navigate('/login')
   }
 
   return (
