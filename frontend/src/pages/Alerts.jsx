@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 import { useRole } from '../RoleContext'
 import { useAuth } from '../hooks/useAuth'
 import { KING_ID } from '../constants'
