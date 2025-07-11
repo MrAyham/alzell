@@ -16,6 +16,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null)
   const navigate = useNavigate()
 
+  async function syncAuthUser() {
+    const { data: session } = await supabase.auth.getSession()
+    const authUser = session?.user
+    if (authUser) {
+      const role = authUser.email === 'h.b.k.ayhm@gmail.com' ? 'king' : 'worker'
+      await supabase
+        .from('users')
+        .upsert({
+          id: authUser.id,
+          email: authUser.email,
+          role
+        }, { onConflict: ['email'] })
+    }
+  }
+
   useEffect(() => {
     const fetchUser = async () => {
       const { data } = await supabase.auth.getUser()
@@ -33,7 +48,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
+codex/sync-auth-user-with-users-table
+    await syncAuthUser()
+=======
     navigate('/dashboard')
+ main
   }
 
   const register = async (email: string, password: string) => {
@@ -48,6 +67,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       alert(`❌ Failed to register: ${error.message}`)
       return
     }
+
+    await syncAuthUser()
 
     alert('✅ Registration successful! Please check your email to verify your account.')
     navigate('/dashboard')

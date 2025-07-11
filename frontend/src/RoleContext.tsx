@@ -1,5 +1,6 @@
 // ========= src/context/RoleContext.tsx =========
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { supabase } from './supabase';
 
 export interface RoleContextType {
   role: string;
@@ -10,6 +11,41 @@ const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
 export const RoleProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState<string>('anon');
+
+  useEffect(() => {
+    const loadRole = async () => {
+      const { data: session } = await supabase.auth.getSession();
+      const user = session?.user;
+      if (user) {
+        const { data } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        setRole(data?.role ?? 'worker');
+      } else {
+        setRole('anon');
+      }
+    };
+
+    loadRole();
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        supabase
+          .from('users')
+          .select('role')
+          .eq('id', session.user.id)
+          .single()
+          .then(({ data }) => setRole(data?.role ?? 'worker'));
+      } else {
+        setRole('anon');
+      }
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <RoleContext.Provider value={{ role, setRole }}>
