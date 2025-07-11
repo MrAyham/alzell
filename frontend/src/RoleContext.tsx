@@ -55,12 +55,13 @@ export const RoleProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useRole = (): RoleContextType => {
-  const context = useContext(RoleContext);
+  const context = useContext(RoleContext)
   if (!context) {
-    throw new Error('useRole must be used within a RoleProvider');
+    console.error('useRole must be used within a RoleProvider')
+    return { role: 'anon', setRole: () => {} }
   }
-  return context;
-};
+  return context
+}
 
 // ========= src/hooks/useAuth.tsx =========
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';

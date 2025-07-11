@@ -16,6 +16,7 @@ interface InventoryItem {
 export default function InventoryPage() {
   const { role } = useRole()
   const { user } = useAuth()
+  if (user === null) return <p className="text-white">Loading...</p>
   const [items, setItems] = useState<InventoryItem[]>([])
   const [search, setSearch] = useState('')
   const [lowOnly, setLowOnly] = useState(false)
