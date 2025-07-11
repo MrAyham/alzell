@@ -7,6 +7,8 @@ export default function KingDashboard() {
   const { role } = useRole()
   const { user } = useAuth()
 
+  if (user === null) return <p className="text-white">Loading...</p>
+
   if (user?.id !== KING_ID) {
     return <div>You do not have access to this page.</div>
   }

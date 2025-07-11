@@ -9,6 +9,7 @@ import { getOrders } from '../supabase/orders'
 export default function KingControlCenter() {
   const { role } = useRole()
   const { user } = useAuth()
+  if (user === null) return <p className='text-white'>Loading...</p>
   const [summary, setSummary] = useState({ staff: 0, inventory: 0, orders: 0 })
   const [enabled, setEnabled] = useState({ staff: true, inventory: true, orders: true })
 

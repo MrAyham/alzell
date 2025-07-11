@@ -7,6 +7,7 @@ import { KING_ID } from '../constants'
 export default function DailyTasks() {
   const { role, name } = useRole()
   const { user } = useAuth()
+  if (user === null) return <p className='text-white'>Loading...</p>
   const [tasks, setTasks] = useState([])
   const [staff, setStaff] = useState([])
   const [showForm, setShowForm] = useState(false)

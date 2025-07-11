@@ -9,6 +9,8 @@ export default function Alerts() {
   const { user } = useAuth()
   const [alerts, setAlerts] = useState([])
 
+  if (user === null) return <p className='text-white'>Loading...</p>
+
   async function fetchAlerts() {
     // fetch dismissed alerts
     const { data: dismissedData } = await supabase
