@@ -3,6 +3,7 @@ import { useAuth } from './hooks/useAuth'
 import Confirm from './pages/Confirm'
 import Login from './pages/login'
 import Register from './pages/register'
+import Logout from './pages/logout'
 import App from './App'
 
 export default function AppRoutes() {
@@ -18,6 +19,7 @@ export default function AppRoutes() {
         path="/register"
         element={user ? <Navigate to="/dashboard" replace /> : <Register />}
       />
+      <Route path="/logout" element={<Logout />} />
       <Route
         path="/dashboard/*"
         element={user ? <App /> : <Navigate to="/login" replace />}
