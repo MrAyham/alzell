@@ -6,7 +6,11 @@ const supabase = createClient(
 )
 
 async function assignKingRole() {
-  const email = 'ayham.elmandil@gmail.com'
+  const email =
+    process.env.KING_EMAIL ||
+    process.env.NEXT_PUBLIC_KING_EMAIL ||
+    process.env.VITE_KING_EMAIL ||
+    'ayham.elmandil@gmail.com'
 
   // Get user ID via Admin API
   const { data: { user }, error: getUserError } = await supabase.auth.admin.getUserByEmail(email)
