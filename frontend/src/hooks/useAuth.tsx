@@ -3,6 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { onAuthStateChange } from '../utils/auth'
 
+// Determine which email should have the KING role. This falls back to the
+// original hard coded address if no environment variable is provided.
+const KING_EMAIL =
+  import.meta.env.NEXT_PUBLIC_KING_EMAIL ||
+  import.meta.env.VITE_KING_EMAIL ||
+  (typeof process !== 'undefined'
+    ? (process as any).env.KING_EMAIL
+    : 'ayham.elmandil@gmail.com')
+
 interface AuthContextProps {
   user: any
   login: (email: string, password: string) => Promise<void>
@@ -21,8 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data: session } = await supabase.auth.getSession()
       const authUser = session?.user
       if (authUser) {
-        const role =
-          authUser.email === 'ayham.elmandil@gmail.com' ? 'king' : 'worker'
+        const role = authUser.email === KING_EMAIL ? 'king' : 'worker'
 
         const { data: existing } = await supabase
           .from('users')
@@ -37,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             role
           })
         } else if (
-          !(existing.role === 'king' && authUser.email !== 'ayham.elmandil@gmail.com')
+          !(existing.role === 'king' && authUser.email !== KING_EMAIL)
         ) {
           await supabase
             .from('users')

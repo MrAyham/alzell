@@ -25,8 +25,19 @@ their own tasks.
 
 ### Royal Mode
 
-Set `VITE_KING_PASSWORD` in your `.env` to enable the hidden admin panel. The SQL below
-creates the log table used for recording royal actions:
+Set `VITE_KING_PASSWORD` in your `.env` to enable the hidden admin panel.
+The email which receives the `king` role can be configured via
+`VITE_KING_EMAIL` (or `NEXT_PUBLIC_KING_EMAIL`). You can assign the role on
+Supabase by running:
+
+```bash
+npm run assign-king
+```
+
+Make sure `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and the king email are set
+as environment variables when running the script.
+
+The SQL below creates the log table used for recording royal actions:
 
 ```sql
 create table king_activity_log (
