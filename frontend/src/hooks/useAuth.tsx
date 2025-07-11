@@ -17,24 +17,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
 
   async function syncAuthUser() {
-    const { data: session } = await supabase.auth.getSession()
-    const authUser = session?.user
-    if (authUser) {
-      const role = authUser.email === 'h.b.k.ayhm@gmail.com' ? 'king' : 'worker'
-      await supabase
-        .from('users')
-        .upsert({
-          id: authUser.id,
-          email: authUser.email,
-          role
-        }, { onConflict: ['email'] })
+    try {
+      const { data: session } = await supabase.auth.getSession()
+      const authUser = session?.user
+      if (authUser) {
+        const role = authUser.email === 'h.b.k.ayhm@gmail.com' ? 'king' : 'worker'
+        await supabase
+          .from('users')
+          .upsert(
+            {
+              id: authUser.id,
+              email: authUser.email,
+              role
+            },
+            { onConflict: ['email'] }
+          )
+      }
+    } catch (err) {
+      console.error('Failed to sync user', err)
     }
   }
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data } = await supabase.auth.getUser()
-      setUser(data.user)
+      try {
+        const { data } = await supabase.auth.getUser()
+        setUser(data.user)
+      } catch (err) {
+        console.error('Failed to fetch user', err)
+        setUser(null)
+      }
     }
     fetchUser()
     const { data: listener } = onAuthStateChange((_event, session) => {
@@ -46,13 +58,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const login = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    if (error) throw error
-    await syncAuthUser()
-    navigate('/dashboard')
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+      if (error) throw error
+      await syncAuthUser()
+      navigate('/dashboard')
+    } catch (err) {
+      console.error('Login failed', err)
+      throw err
+    }
   }
 
   const register = async (email: string, password: string) => {
@@ -61,23 +78,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return
     }
 
-    const { error } = await supabase.auth.signUp({ email, password })
+    try {
+      const { error } = await supabase.auth.signUp({ email, password })
 
-    if (error) {
-      alert(`❌ Failed to register: ${error.message}`)
-      return
+      if (error) {
+        alert(`❌ Failed to register: ${error.message}`)
+        return
+      }
+
+      await syncAuthUser()
+
+      alert('✅ Registration successful! Please check your email to verify your account.')
+      navigate('/dashboard')
+    } catch (err) {
+      console.error('Registration failed', err)
+      alert('❌ Failed to register')
     }
-
-    await syncAuthUser()
-
-    alert('✅ Registration successful! Please check your email to verify your account.')
-    navigate('/dashboard')
   }
 
   const logout = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
-    navigate('/login')
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+      navigate('/login')
+    } catch (err) {
+      console.error('Logout failed', err)
+    }
   }
 
   return (
@@ -89,6 +115,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider')
+  if (!ctx) {
+    console.error('useAuth must be used within AuthProvider')
+    return {
+      user: null,
+      login: async () => {},
+      register: async () => {},
+      logout: async () => {}
+    }
+  }
   return ctx
 }
