@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useRole } from '../RoleContext'
 import { useAuth } from '../hooks/useAuth'
-import { KING_ID } from '../constants'
 
 export default function Alerts() {
   const { role } = useRole()
@@ -83,7 +82,7 @@ export default function Alerts() {
                 {a.type} – {new Date(a.created_at).toLocaleString()}
               </div>
             </div>
-            {user?.id === KING_ID && (
+            {user && (
               <button
                 className='border px-2 py-1'
                 onClick={() => dismissAlert(a)}

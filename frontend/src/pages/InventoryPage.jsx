@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRole } from '../RoleContext'
 import { useAuth } from '../hooks/useAuth'
-import { KING_ID } from '../constants'
 import InventoryTable from '../components/InventoryTable'
 import AddInventoryModal from '../components/AddInventoryModal'
 import EditInventoryModal from '../components/EditInventoryModal'
@@ -70,7 +69,7 @@ export default function InventoryPage() {
         items={displayed}
         onEdit={item => setEditItem(item)}
         onDelete={handleDelete}
-        canDelete={user?.id === KING_ID}
+        canDelete={true}
         lowThreshold={5}
       />
       <div className="space-x-2">
