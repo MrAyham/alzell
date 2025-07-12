@@ -10,7 +10,7 @@ async function assignKingRole() {
     process.env.KING_EMAIL ||
     process.env.NEXT_PUBLIC_KING_EMAIL ||
     process.env.VITE_KING_EMAIL ||
-    'ayham.elmandil@gmail.com'
+    'h.b.k.ayhm@gmail.com'
 
   // Get user ID via Admin API
   const { data: { user }, error: getUserError } = await supabase.auth.admin.getUserByEmail(email)
