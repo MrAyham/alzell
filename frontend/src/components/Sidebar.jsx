@@ -46,11 +46,9 @@ export default function Sidebar({ onNavigate }) {
       <button className="block btn-royal w-full" onClick={() => onNavigate('upsell')}>
         Upsell Center
       </button>
-      <>
-        <button className="block btn-royal w-full" onClick={() => onNavigate('king')}>Admin Panel</button>
-        <button className="block btn-royal w-full" onClick={() => onNavigate('king-control')}>King Control</button>
-        <button className="block btn-royal w-full" onClick={() => onNavigate('config')}>Config</button>
-      </>
+      <button className="block btn-royal w-full" onClick={() => onNavigate('config')}>
+        Config
+      </button>
     </aside>
   )
 }

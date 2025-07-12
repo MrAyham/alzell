@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Home from './pages/Home'
 import DailyReports from './pages/DailyReports'
 import Alerts from './pages/Alerts'
-import KingDashboard from './pages/KingDashboard'
 import DailyTasks from './pages/DailyTasks'
 import InventoryPage from './pages/inventory/InventoryPage'
 import StaffPage from './pages/StaffPage'
@@ -13,15 +12,12 @@ import Offers from './pages/Offers'
 import OrdersPage from './pages/OrdersPage'
 import NotificationsPage from './pages/NotificationsPage'
 import AIAssistant from './pages/AIAssistant'
-import KingControlCenter from './pages/KingControlCenter'
 import ConfigSettings from './pages/ConfigSettings'
 import Sidebar from './components/Sidebar'
 import Navbar from './components/Navbar'
-import { useRole } from './RoleContext'
 import { useAuth } from './hooks/useAuth'
 
 function App() {
-  const { role } = useRole()
   const { user } = useAuth()
   const [page, setPage] = useState('home')
 
@@ -30,9 +26,7 @@ function App() {
   }
 
   let content
-  if (page === 'king') {
-    content = <KingDashboard />
-  } else if (page === 'dailyReports') {
+  if (page === 'dailyReports') {
     content = <DailyReports onBack={() => setPage('home')} />
   } else if (page === 'inventory') {
     content = <InventoryPage />
@@ -56,8 +50,6 @@ function App() {
     content = <NotificationsPage />
   } else if (page === 'ai') {
     content = <AIAssistant />
-  } else if (page === 'king-control') {
-    content = <KingControlCenter />
   } else if (page === 'config') {
     content = <ConfigSettings />
   } else {
