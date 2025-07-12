@@ -64,7 +64,6 @@ export default function InventoryPage() {
       </label>
 
       <h2 className="text-xl font-bold">Inventory Management</h2>
- main
       <InventoryTable
         items={displayed}
         onEdit={item => setEditItem(item)}
