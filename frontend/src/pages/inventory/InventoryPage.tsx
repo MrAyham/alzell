@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRole } from '../../RoleContext'
 import { useAuth } from '../../hooks/useAuth'
-import { KING_ID } from '../../constants'
 import { getInventory } from '../../supabase/inventory'
 
 interface InventoryItem {
@@ -35,11 +34,6 @@ export default function InventoryPage() {
     fetchData()
   }, [])
 
-  if (user?.id !== KING_ID) {
-    return (
-      <div className="text-[#FFD700]">You do not have access to this page.</div>
-    )
-  }
 
   const filtered = items
     .filter((i) => i.item_name.toLowerCase().includes(search.toLowerCase()))

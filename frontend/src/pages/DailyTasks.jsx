@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useRole } from '../RoleContext'
 import { useAuth } from '../hooks/useAuth'
-import { KING_ID } from '../constants'
 
 export default function DailyTasks() {
   const { role, name } = useRole()
@@ -62,7 +61,7 @@ export default function DailyTasks() {
     fetchTasks()
   }
 
-  const canEdit = user?.id === KING_ID
+  const canEdit = true
 
   return (
     <div className="space-y-4 text-[#FFD700]">

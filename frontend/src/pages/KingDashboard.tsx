@@ -1,7 +1,6 @@
 import React from 'react'
 import { useRole } from '../RoleContext'
 import { useAuth } from '../hooks/useAuth'
-import { KING_ID } from '../constants'
 
 export default function KingDashboard() {
   const { role } = useRole()
@@ -9,9 +8,6 @@ export default function KingDashboard() {
 
   if (user === null) return <p className="text-white">Loading...</p>
 
-  if (user?.id !== KING_ID) {
-    return <div>You do not have access to this page.</div>
-  }
 
   return (
     <div className="min-h-screen bg-black p-6 text-[#FFD700] space-y-4">

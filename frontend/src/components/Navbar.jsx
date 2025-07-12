@@ -1,16 +1,9 @@
-import { useRole } from '../RoleContext'
 import { useAuth } from '../hooks/useAuth'
-import { KING_ID } from '../constants'
 
 export default function Navbar() {
-  const { role } = useRole()
   const { user, logout } = useAuth()
 
-  const identity = role === 'king'
-    ? '👑 الملك'
-    : user
-      ? `👷 ${user.email}`
-      : ''
+  const identity = user ? `👷 ${user.email}` : ''
 
   return (
     <header className="mb-4 flex justify-between items-center card-royal">
@@ -20,7 +13,7 @@ export default function Navbar() {
         {user && (
           <button onClick={logout} className="btn-royal">Logout</button>
         )}
-        {user?.id === KING_ID && (
+        {user && (
           <button className="btn-royal">Settings</button>
         )}
       </div>
