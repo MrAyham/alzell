@@ -1,8 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../supabase'
 import { onAuthStateChange } from '../utils/auth'
-
 
 interface AuthContextProps {
   user: any
@@ -15,48 +13,11 @@ const AuthContext = createContext<AuthContextProps | null>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null)
-  const navigate = useNavigate()
-
-  async function syncAuthUser() {
-    try {
-      const { data: session } = await supabase.auth.getSession()
-      const authUser = session?.user
-      if (authUser) {
-        const role = 'worker'
-
-        const { data: existing } = await supabase
-          .from('users')
-          .select('id')
-          .eq('id', authUser.id)
-          .single()
-
-        if (!existing) {
-          await supabase.from('users').insert({
-            id: authUser.id,
-            email: authUser.email,
-            role
-          })
-        } else {
-          await supabase
-            .from('users')
-            .update({ role })
-            .eq('id', authUser.id)
-        }
-      }
-    } catch (err) {
-      console.error('Failed to sync user', err)
-    }
-  }
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const { data } = await supabase.auth.getUser()
-        setUser(data.user)
-      } catch (err) {
-        console.error('Failed to fetch user', err)
-        setUser(null)
-      }
+      const { data } = await supabase.auth.getUser()
+      setUser(data.user)
     }
     fetchUser()
     const { data: listener } = onAuthStateChange((_event, session) => {
@@ -68,18 +29,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const login = async (email: string, password: string) => {
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-      if (error) throw error
-      await syncAuthUser()
-      navigate('/dashboard')
-    } catch (err) {
-      console.error('Login failed', err)
-      throw err
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) throw error
   }
 
   const register = async (email: string, password: string) => {
@@ -88,32 +39,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return
     }
 
-    try {
-      const { error } = await supabase.auth.signUp({ email, password })
+    const { error } = await supabase.auth.signUp({ email, password })
 
-      if (error) {
-        alert(`❌ Failed to register: ${error.message}`)
-        return
-      }
-
-      await syncAuthUser()
-
-      alert('✅ Registration successful! Please check your email to verify your account.')
-      navigate('/dashboard')
-    } catch (err) {
-      console.error('Registration failed', err)
-      alert('❌ Failed to register')
+    if (error) {
+      alert(`❌ Failed to register: ${error.message}`)
+      return
     }
+
+    alert('✅ Registration successful! Please check your email to verify your account.')
   }
 
   const logout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut()
-      if (error) throw error
-      navigate('/login')
-    } catch (err) {
-      console.error('Logout failed', err)
-    }
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
   }
 
   return (
@@ -125,14 +63,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext)
-  if (!ctx) {
-    console.error('useAuth must be used within AuthProvider')
-    return {
-      user: null,
-      login: async () => {},
-      register: async () => {},
-      logout: async () => {}
-    }
-  }
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider')
   return ctx
 }

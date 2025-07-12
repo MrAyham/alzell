@@ -1,10 +1,8 @@
 create table users (
-  id uuid primary key references auth.users(id),
-  email text unique not null,
-  role text default 'worker',
-  created_at timestamp with time zone default timezone('utc', now())
+  uid uuid primary key references auth.users(id),
+  email text,
+  role text default 'staff'
 );
-
 -- policies will limit insert/select/update based on role value
 
 create table staff (
@@ -118,3 +116,9 @@ create table inventory (
 );
 
 -- Enable row level security for users table
+alter table users enable row level security;
+
+create policy "Allow insert for authenticated users"
+on users for insert
+to authenticated
+using (auth.uid() = uid);
