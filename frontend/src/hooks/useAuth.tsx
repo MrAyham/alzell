@@ -4,12 +4,8 @@ import { supabase } from '../lib/supabase'
 import { onAuthStateChange } from '../utils/auth'
 
 // Temporarily disable KING role logic
- jime3v-codex/deactivate-king-role-temporarily
-const KING_EMAIL = ''
-const isKing = true
 // const KING_EMAIL = ''
 // const isKing = true
- main
 
 interface AuthContextProps {
   user: any
