@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabase'
 import { onAuthStateChange } from '../utils/auth'
 
 // Temporarily disable KING role logic
-const KING_EMAIL = ''
-const isKing = true
+// const KING_EMAIL = ''
+// const isKing = true
 
 interface AuthContextProps {
   user: any
