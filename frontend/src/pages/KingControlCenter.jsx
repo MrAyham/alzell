@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRole } from '../RoleContext'
 import { useAuth } from '../hooks/useAuth'
-import { KING_ID } from '../constants'
 import { getStaff } from '../supabase/staff'
 import { getInventory } from '../supabase/inventory'
 import { getOrders } from '../supabase/orders'
@@ -13,7 +12,7 @@ export default function KingControlCenter() {
   const [summary, setSummary] = useState({ staff: 0, inventory: 0, orders: 0 })
   const [enabled, setEnabled] = useState({ staff: true, inventory: true, orders: true })
 
-  useEffect(() => { if (user?.id === KING_ID) load() }, [user])
+  useEffect(() => { load() }, [user])
 
   async function load() {
     const staff = await getStaff()
@@ -22,7 +21,6 @@ export default function KingControlCenter() {
     setSummary({ staff: staff.length, inventory: inv.length, orders: ord.length })
   }
 
-  if (user?.id !== KING_ID) return <div>You do not have access to this page.</div>
 
   return (
     <div className='space-y-4 text-[#FFD700]'>

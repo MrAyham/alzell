@@ -1,6 +1,5 @@
 import { useRole } from '../RoleContext'
 import { useAuth } from '../hooks/useAuth'
-import { KING_ID } from '../constants'
 
 export default function Sidebar({ onNavigate }) {
   const { role } = useRole()
@@ -47,13 +46,11 @@ export default function Sidebar({ onNavigate }) {
       <button className="block btn-royal w-full" onClick={() => onNavigate('upsell')}>
         Upsell Center
       </button>
-      {user?.id === KING_ID && (
-        <>
-          <button className="block btn-royal w-full" onClick={() => onNavigate('king')}>Admin Panel</button>
-          <button className="block btn-royal w-full" onClick={() => onNavigate('king-control')}>King Control</button>
-          <button className="block btn-royal w-full" onClick={() => onNavigate('config')}>Config</button>
-        </>
-      )}
+      <>
+        <button className="block btn-royal w-full" onClick={() => onNavigate('king')}>Admin Panel</button>
+        <button className="block btn-royal w-full" onClick={() => onNavigate('king-control')}>King Control</button>
+        <button className="block btn-royal w-full" onClick={() => onNavigate('config')}>Config</button>
+      </>
     </aside>
   )
 }

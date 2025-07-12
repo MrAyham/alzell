@@ -6,8 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "postinstall": "",
-    "assign-king": "node scripts/assignKingRole.js"
+    "postinstall": ""
   },
   "dependencies": {
     "react": "^18.2.0",
