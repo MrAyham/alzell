@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "postinstall": ""
+    "postinstall": "",
+    "check:unsafe": "node ../scripts/find-unsafe.js"
   },
   "dependencies": {
     "react": "^18.2.0",
