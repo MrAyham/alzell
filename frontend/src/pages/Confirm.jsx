@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../supabase'
 
 export default function Confirm() {
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function Confirm() {
           { uid: user.id, email: user.email }
         ])
       }
-      window.location.replace('/dashboard')
+      window.location.replace('/')
     }
     finish()
   }, [])

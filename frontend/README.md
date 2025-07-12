@@ -19,7 +19,19 @@ Make sure to configure the Supabase credentials in `.env`.
 ### Daily Tasks
 
 Use the **Tasks** link in the sidebar to manage daily tasks. The table shows
-each task along with the assigned staff member, shift and status. Admin users can
+each task along with the assigned staff member, shift and status. The king can
 add new tasks or delete them, while other staff may only update the status of
 their own tasks.
 
+### Royal Mode
+
+Set `VITE_KING_PASSWORD` in your `.env` to enable the hidden admin panel. The SQL below
+creates the log table used for recording royal actions:
+
+```sql
+create table king_activity_log (
+  id uuid default uuid_generate_v4() primary key,
+  action text,
+  timestamp timestamp default now()
+);
+```
