@@ -3,4 +3,14 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    target: 'esnext',
+    minify: 'esbuild',
+  },
+  esbuild: {
+    legalComments: 'none',
+  },
+  define: {
+    'process.env': {},
+  },
 })
