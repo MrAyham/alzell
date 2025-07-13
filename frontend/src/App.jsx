@@ -24,6 +24,12 @@ function App() {
   const { role } = useRole()
   const { user } = useAuth()
   const [page, setPage] = useState('home')
+  const rolePages = {
+    admin: ['home','dailyReports','inventory','staff','shifts','schedule','offers','orders','notifications','ai','alerts','tasks','upsell','king','king-control','config'],
+    cashier: ['home','orders'],
+    chef: ['home','inventory','orders'],
+    delivery: ['home','orders'],
+  }
 
   if (!user?.confirmed_at) {
     return <p className='text-white'>Please verify your email to access the app.</p>
@@ -62,6 +68,10 @@ function App() {
     content = <ConfigSettings />
   } else {
     content = <Home onViewReports={() => setPage('dailyReports')} />
+  }
+
+  if (!rolePages[role]?.includes(page)) {
+    content = <p className='text-white'>Access Denied</p>
   }
 
   return (
