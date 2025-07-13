@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import Confirm from './pages/Confirm'
 import Login from './pages/login'
-import Register from './pages/register'
 import Logout from './pages/logout'
 import App from './App'
 
@@ -14,10 +13,6 @@ export default function AppRoutes() {
       <Route
         path="/login"
         element={user ? <Navigate to="/dashboard" replace /> : <Login />}
-      />
-      <Route
-        path="/register"
-        element={user ? <Navigate to="/dashboard" replace /> : <Register />}
       />
       <Route path="/logout" element={<Logout />} />
       <Route

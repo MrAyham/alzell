@@ -1,6 +1,7 @@
 // ========= src/context/RoleContext.tsx =========
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { supabase } from './lib/supabase';
+const kingEmail = import.meta.env.VITE_KING_EMAIL;
 
 export interface RoleContextType {
   role: string;
@@ -17,12 +18,16 @@ export const RoleProvider = ({ children }: { children: ReactNode }) => {
       const { data: session } = await supabase.auth.getSession();
       const user = session?.user;
       if (user) {
-        const { data } = await supabase
-          .from('users')
-          .select('role')
-          .eq('id', user.id)
-          .single();
-        setRole(data?.role ?? 'worker');
+        if (user.email === kingEmail) {
+          setRole('admin');
+        } else {
+          const { data } = await supabase
+            .from('staff')
+            .select('role')
+            .eq('uid', user.id)
+            .single();
+          setRole(data?.role ?? 'worker');
+        }
       } else {
         setRole('anon');
       }
@@ -31,12 +36,16 @@ export const RoleProvider = ({ children }: { children: ReactNode }) => {
     loadRole();
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        supabase
-          .from('users')
-          .select('role')
-          .eq('id', session.user.id)
-          .single()
-          .then(({ data }) => setRole(data?.role ?? 'worker'));
+        if (session.user.email === kingEmail) {
+          setRole('admin');
+        } else {
+          supabase
+            .from('staff')
+            .select('role')
+            .eq('uid', session.user.id)
+            .single()
+            .then(({ data }) => setRole(data?.role ?? 'worker'));
+        }
       } else {
         setRole('anon');
       }
