@@ -1,17 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import AppRoutes from './routes'
+import App from './App'
 import { RoleProvider } from './RoleContext'
 import { AuthProvider } from './hooks/useAuth'
+import Confirm from './pages/Confirm'
 import './index.css'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
       <RoleProvider>
         <BrowserRouter>
-          <AppRoutes />
+          <Routes>
+            <Route path="/confirm" element={<Confirm />} />
+            <Route path="*" element={<App />} />
+          </Routes>
         </BrowserRouter>
       </RoleProvider>
     </AuthProvider>

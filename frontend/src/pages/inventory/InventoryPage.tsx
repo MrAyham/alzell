@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useRole } from '../../RoleContext'
-import { useAuth } from '../../hooks/useAuth'
 import { getInventory } from '../../supabase/inventory'
 
 interface InventoryItem {
@@ -14,8 +13,6 @@ interface InventoryItem {
 
 export default function InventoryPage() {
   const { role } = useRole()
-  const { user } = useAuth()
-  if (user === null) return <p className="text-white">Loading...</p>
   const [items, setItems] = useState<InventoryItem[]>([])
   const [search, setSearch] = useState('')
   const [lowOnly, setLowOnly] = useState(false)
@@ -34,6 +31,11 @@ export default function InventoryPage() {
     fetchData()
   }, [])
 
+  if (role !== 'King') {
+    return (
+      <div className="text-[#FFD700]">You do not have access to this page.</div>
+    )
+  }
 
   const filtered = items
     .filter((i) => i.item_name.toLowerCase().includes(search.toLowerCase()))

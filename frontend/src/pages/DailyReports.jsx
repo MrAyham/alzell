@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { exportToCsv } from '../utils/export'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../supabase'
 import {
   getReports,
   addReport as addReportApi,

@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { supabase } from '../supabase'
 
 const LOW_STOCK_THRESHOLD = 5
 

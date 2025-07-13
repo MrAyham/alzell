@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../supabase'
 import { addShift } from '../supabase/shifts'
 
 export default function Shifts() {

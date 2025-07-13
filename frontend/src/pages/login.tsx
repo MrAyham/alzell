@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
-import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
   const { login } = useAuth()
-  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -13,7 +11,6 @@ export default function Login() {
     e.preventDefault()
     try {
       await login(email, password)
-      navigate('/dashboard')
     } catch (err: any) {
       setError(err.message)
     }
@@ -41,6 +38,9 @@ export default function Login() {
         <button className="bg-gold text-black px-4 py-2 rounded hover:scale-105 transition-transform">
           Login
         </button>
+        <p className="mt-2 text-sm">
+          No account? <a href="#register" className="text-gold underline" onClick={() => location.hash = 'register'}>Register</a>
+        </p>
       </form>
     </div>
   )
