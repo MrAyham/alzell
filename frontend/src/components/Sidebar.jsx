@@ -1,7 +1,8 @@
-import { useRole } from '../RoleContext'
+import { useRole, usePermissions } from '../RoleContext'
 
 export default function Sidebar({ onNavigate }) {
   const { role } = useRole()
+  const { isKing } = usePermissions()
 
   return (
     <aside className="space-y-2 mr-4 p-4 card-royal">
@@ -44,7 +45,7 @@ export default function Sidebar({ onNavigate }) {
       <button className="block btn-royal w-full" onClick={() => onNavigate('upsell')}>
         Upsell Center
       </button>
-      {role === 'King' && (
+      {isKing() && (
         <>
           <button className="block btn-royal w-full" onClick={() => onNavigate('king')}>Admin Panel</button>
           <button className="block btn-royal w-full" onClick={() => onNavigate('king-control')}>King Control</button>

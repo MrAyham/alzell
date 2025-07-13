@@ -2,11 +2,12 @@ import { useEffect, useState, Fragment } from 'react'
 import { getStaff, deleteStaff } from '../supabase/staff'
 import AddStaffModal from './AddStaffModal'
 import EditStaffModal from './EditStaffModal'
-import { useRole } from '../RoleContext'
+import { useRole, usePermissions } from '../RoleContext'
 import { exportToCsv } from '../utils/export'
 
 export default function StaffTable() {
   const { role } = useRole()
+  const { isKing } = usePermissions()
   const [staff, setStaff] = useState([])
   const [filters, setFilters] = useState({ status: '' })
   const [showAdd, setShowAdd] = useState(false)
@@ -99,7 +100,7 @@ export default function StaffTable() {
                     >
                       Edit
                     </button>
-                    {role === 'King' && (
+                    {isKing() && (
                       <button
                         className="border border-[#800000] px-1"
                         onClick={() => handleDelete(s.id)}

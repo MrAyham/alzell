@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase'
-import { useRole } from '../RoleContext'
+import { useRole, usePermissions } from '../RoleContext'
 
 export default function DailyTasks() {
   const { role, name } = useRole()
+  const { isKing } = usePermissions()
   const [tasks, setTasks] = useState([])
   const [staff, setStaff] = useState([])
   const [showForm, setShowForm] = useState(false)
@@ -58,7 +59,7 @@ export default function DailyTasks() {
     fetchTasks()
   }
 
-  const canEdit = role === 'King'
+  const canEdit = isKing()
 
   return (
     <div className="space-y-4 text-[#FFD700]">

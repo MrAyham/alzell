@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useRole } from '../RoleContext'
+import { useRole, usePermissions } from '../RoleContext'
 import InventoryTable from '../components/InventoryTable'
 import AddInventoryModal from '../components/AddInventoryModal'
 import EditInventoryModal from '../components/EditInventoryModal'
@@ -8,6 +8,7 @@ import { exportToCsv } from '../utils/export'
 
 export default function InventoryPage() {
   const { role } = useRole()
+  const { isKing, canAccessPage } = usePermissions()
   const [items, setItems] = useState([])
   const [showAdd, setShowAdd] = useState(false)
   const [editItem, setEditItem] = useState(null)
@@ -66,7 +67,7 @@ export default function InventoryPage() {
         items={displayed}
         onEdit={item => setEditItem(item)}
         onDelete={handleDelete}
-        canDelete={role === 'King'}
+        canDelete={isKing()}
         lowThreshold={5}
       />
       <div className="space-x-2">
