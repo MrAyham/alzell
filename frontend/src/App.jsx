@@ -16,27 +16,30 @@ import AIAssistant from './pages/AIAssistant'
 import KingControlCenter from './pages/KingControlCenter'
 import ConfigSettings from './pages/ConfigSettings'
 import Sidebar from './components/Sidebar'
-import Navbar from './components/Navbar'
+import Header from './components/Header'
 import { useRole } from './RoleContext'
 import { useAuth } from './hooks/useAuth'
+import Login from './pages/login'
+import Register from './pages/register'
 
 function App() {
   const { role } = useRole()
   const { user } = useAuth()
   const [page, setPage] = useState('home')
-  const rolePages = {
-    admin: ['home','dailyReports','inventory','staff','shifts','schedule','offers','orders','notifications','ai','alerts','tasks','upsell','king','king-control','config'],
-    cashier: ['home','orders'],
-    chef: ['home','inventory','orders'],
-    delivery: ['home','orders'],
+
+  if (!user) {
+    if (location.hash === '#register') {
+      return <Register />
+    }
+    return <Login />
   }
 
-  if (!user?.confirmed_at) {
+  if (!user.confirmed_at) {
     return <p className='text-white'>Please verify your email to access the app.</p>
   }
 
   let content
-  if (page === 'king') {
+  if (role === 'King' && page === 'king') {
     content = <KingDashboard />
   } else if (page === 'dailyReports') {
     content = <DailyReports onBack={() => setPage('home')} />
@@ -70,15 +73,11 @@ function App() {
     content = <Home onViewReports={() => setPage('dailyReports')} />
   }
 
-  if (!rolePages[role]?.includes(page)) {
-    content = <p className='text-white'>Access Denied</p>
-  }
-
   return (
     <div className='p-6 min-h-screen flex'>
       <Sidebar onNavigate={setPage} />
       <div className='flex-1'>
-        <Navbar />
+        <Header />
         {content}
       </div>
     </div>

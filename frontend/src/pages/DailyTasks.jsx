@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../supabase'
 import { useRole } from '../RoleContext'
-import { useAuth } from '../hooks/useAuth'
 
 export default function DailyTasks() {
   const { role, name } = useRole()
-  const { user } = useAuth()
-  if (user === null) return <p className='text-white'>Loading...</p>
   const [tasks, setTasks] = useState([])
   const [staff, setStaff] = useState([])
   const [showForm, setShowForm] = useState(false)
@@ -61,7 +58,7 @@ export default function DailyTasks() {
     fetchTasks()
   }
 
-  const canEdit = true
+  const canEdit = role === 'King'
 
   return (
     <div className="space-y-4 text-[#FFD700]">

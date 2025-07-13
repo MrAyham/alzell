@@ -1,7 +1,5 @@
 // ========= src/context/RoleContext.tsx =========
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { supabase } from './lib/supabase';
-const kingEmail = import.meta.env.VITE_KING_EMAIL;
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface RoleContextType {
   role: string;
@@ -13,49 +11,6 @@ const RoleContext = createContext<RoleContextType | undefined>(undefined);
 export const RoleProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState<string>('anon');
 
-  useEffect(() => {
-    const loadRole = async () => {
-      const { data: session } = await supabase.auth.getSession();
-      const user = session?.user;
-      if (user) {
-        if (user.email === kingEmail) {
-          setRole('admin');
-        } else {
-          const { data } = await supabase
-            .from('staff')
-            .select('role')
-            .eq('uid', user.id)
-            .single();
-          setRole(data?.role ?? 'worker');
-        }
-      } else {
-        setRole('anon');
-      }
-    };
-
-    loadRole();
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        if (session.user.email === kingEmail) {
-          setRole('admin');
-        } else {
-          supabase
-            .from('staff')
-            .select('role')
-            .eq('uid', session.user.id)
-            .single()
-            .then(({ data }) => setRole(data?.role ?? 'worker'));
-        }
-      } else {
-        setRole('anon');
-      }
-    });
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
-
   return (
     <RoleContext.Provider value={{ role, setRole }}>
       {children}
@@ -64,17 +19,20 @@ export const RoleProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useRole = (): RoleContextType => {
-  const context = useContext(RoleContext)
+  const context = useContext(RoleContext);
   if (!context) {
-    console.error('useRole must be used within a RoleProvider')
-    return { role: 'anon', setRole: () => {} }
+    throw new Error('useRole must be used within a RoleProvider');
   }
-  return context
-}
+  return context;
+};
 
 // ========= src/hooks/useAuth.tsx =========
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { Session, User } from '@supabase/supabase-js';
+import { createClient, Session, User } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface AuthContextType {
   user: User | null;

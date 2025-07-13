@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getSchedule, addSchedule, updateSchedule, deleteSchedule } from '../supabase/shiftsSchedule'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../supabase'
 import ShiftModal from '../components/ShiftModal'
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']

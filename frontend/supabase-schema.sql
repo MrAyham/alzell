@@ -7,12 +7,8 @@ create table users (
 
 create table staff (
   id uuid default uuid_generate_v4() primary key,
-  uid uuid references auth.users(id),
-  email text,
   name text,
   role text,
-  created_by uuid references auth.users(id),
-  is_active boolean default true,
   shift text,
   status text default 'Active',
   created_at timestamp default now()

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../supabase'
 import { useRole } from '../RoleContext'
 
 export default function Home({ onViewReports }) {

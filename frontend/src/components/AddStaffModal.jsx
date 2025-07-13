@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { addStaff, createStaffAccount } from '../supabase/staff'
+import { addStaff } from '../supabase/staff'
 
 export default function AddStaffModal({ isOpen, onClose, onAdded }) {
   const [form, setForm] = useState({
     name: '',
-    email: '',
-    password: '',
     role: 'Chef',
     shift: '',
     status: 'Active'
@@ -21,19 +19,15 @@ export default function AddStaffModal({ isOpen, onClose, onAdded }) {
   }
 
   function handleCancel() {
-    setForm({ name: '', email: '', password: '', role: 'Chef', shift: '', status: 'Active' })
+    setForm({ name: '', role: 'Chef', shift: '', status: 'Active' })
     onClose()
   }
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (form.email && form.password) {
-      await createStaffAccount(form)
-    } else {
-      await addStaff(form)
-    }
+    await addStaff(form)
     onAdded()
-    setForm({ name: '', email: '', password: '', role: 'Chef', shift: '', status: 'Active' })
+    setForm({ name: '', role: 'Chef', shift: '', status: 'Active' })
     onClose()
   }
 
@@ -42,21 +36,6 @@ export default function AddStaffModal({ isOpen, onClose, onAdded }) {
       <div className="card-royal space-y-2 w-72">
         <h3 className="text-lg text-gold">Add Staff</h3>
         <form onSubmit={handleSubmit} className="space-y-2">
-          <input
-            className="border border-gold bg-dark text-gold p-1 w-full"
-            placeholder="Email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-          />
-          <input
-            type="password"
-            className="border border-gold bg-dark text-gold p-1 w-full"
-            placeholder="Temporary Password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-          />
           <input
             className="border border-gold bg-dark text-gold p-1 w-full"
             placeholder="Name"

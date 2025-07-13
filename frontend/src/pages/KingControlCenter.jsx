@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useRole } from '../RoleContext'
-import { useAuth } from '../hooks/useAuth'
 import { getStaff } from '../supabase/staff'
 import { getInventory } from '../supabase/inventory'
 import { getOrders } from '../supabase/orders'
 
 export default function KingControlCenter() {
   const { role } = useRole()
-  const { user } = useAuth()
-  if (user === null) return <p className='text-white'>Loading...</p>
   const [summary, setSummary] = useState({ staff: 0, inventory: 0, orders: 0 })
   const [enabled, setEnabled] = useState({ staff: true, inventory: true, orders: true })
 
-  useEffect(() => { load() }, [user])
+  useEffect(() => { if (role === 'King') load() }, [role])
 
   async function load() {
     const staff = await getStaff()
@@ -21,6 +18,7 @@ export default function KingControlCenter() {
     setSummary({ staff: staff.length, inventory: inv.length, orders: ord.length })
   }
 
+  if (role !== 'King') return <div>You do not have access to this page.</div>
 
   return (
     <div className='space-y-4 text-[#FFD700]'>
