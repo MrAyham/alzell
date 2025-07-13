@@ -1,5 +1,10 @@
 // ========= src/context/RoleContext.tsx =========
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createClient, Session, User } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export interface RoleContextType {
   role: string;
@@ -10,6 +15,29 @@ const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
 export const RoleProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState<string>('anon');
+
+  useEffect(() => {
+    const loadRole = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      const user = session?.user;
+      if (!user) {
+        setRole('anon');
+        return;
+      }
+      const { data } = await supabase
+        .from('users')
+        .select('roles(name)')
+        .eq('uid', user.id)
+        .single();
+      setRole(data?.roles?.name ?? 'anon');
+    };
+
+    loadRole();
+    const { data: listener } = supabase.auth.onAuthStateChange(loadRole);
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <RoleContext.Provider value={{ role, setRole }}>
@@ -26,13 +54,24 @@ export const useRole = (): RoleContextType => {
   return context;
 };
 
+const rolePermissions: Record<string, string[]> = {
+  King: ['*'],
+  Admin: ['inventory', 'staff', 'dailyReports', 'orders'],
+  Chef: ['inventory', 'dailyReports'],
+  Waiter: ['orders'],
+};
+
+export function usePermissions() {
+  const { role } = useRole();
+  const perms = rolePermissions[role] || [];
+  const isKing = () => role === 'King';
+  const getUserPermissions = () => (isKing() ? ['*'] : perms);
+  const canAccessPage = (page: string) => isKing() || perms.includes(page);
+  return { isKing, canAccessPage, getUserPermissions };
+}
+
 // ========= src/hooks/useAuth.tsx =========
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { createClient, Session, User } from '@supabase/supabase-js';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface AuthContextType {
   user: User | null;

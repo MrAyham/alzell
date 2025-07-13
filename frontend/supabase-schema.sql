@@ -1,9 +1,13 @@
+create table roles (
+  id serial primary key,
+  name text not null unique
+);
+
 create table users (
   uid uuid primary key references auth.users(id),
   email text,
-  role text default 'staff'
+  role_id integer references roles(id)
 );
--- policies will limit insert/select/update based on role value
 
 create table staff (
   id uuid default uuid_generate_v4() primary key,
@@ -24,23 +28,12 @@ create table daily_reports (
   created_at timestamp default now()
 );
 
- codex/create-and-link-offers-page
 create table dismissed_alerts (
   id uuid default uuid_generate_v4() primary key,
   message text,
   created_at timestamp default now()
 );
 
-=======
- codex/build-inventory-management-page
-=======
-create table dismissed_alerts (
-  id uuid default uuid_generate_v4() primary key,
-  message text
-);
-
- main
- main
 create table daily_tasks (
   id uuid default uuid_generate_v4() primary key,
   task text,
@@ -58,8 +51,6 @@ create table shifts_schedule (
   created_at timestamp default now()
 );
 
- codex/create-orders-and-order_items-tables-in-supabase
--- codex/create-orders-tables
 create table orders (
   id uuid default uuid_generate_v4() primary key,
   order_number serial,
@@ -76,8 +67,8 @@ create table order_items (
   menu_item_id uuid references menu_items(id),
   quantity integer default 1,
   special_request text
-=======
- codex/add-upsell-center-page
+);
+
 create table upsell_items (
   id uuid default uuid_generate_v4() primary key,
   title text,
@@ -91,9 +82,9 @@ create table upsell_items (
 create table daily_notes (
   id uuid default uuid_generate_v4() primary key,
   note text,
-  date date,
-=======
- codex/create-and-link-offers-page
+  date date
+);
+
 create table offers (
   id uuid default uuid_generate_v4() primary key,
   title text not null,
@@ -101,21 +92,18 @@ create table offers (
   discount_percent integer,
   valid_from date,
   valid_to date,
-  is_active boolean default true,
-=======
+  is_active boolean default true
+);
+
 create table inventory (
   id uuid default uuid_generate_v4() primary key,
   item_name text not null,
   quantity integer not null,
   unit text,
   low_stock_alert boolean default false,
- main
- main
   created_at timestamp default now()
- main
 );
 
--- Enable row level security for users table
 alter table users enable row level security;
 
 create policy "Allow insert for authenticated users"

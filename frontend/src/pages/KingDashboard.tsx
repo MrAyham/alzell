@@ -1,10 +1,11 @@
 import React from 'react'
-import { useRole } from '../RoleContext'
+import { useRole, usePermissions } from '../RoleContext'
 
 export default function KingDashboard() {
   const { role } = useRole()
+  const { isKing } = usePermissions()
 
-  if (role !== 'King') {
+  if (!isKing()) {
     return <div>You do not have access to this page.</div>
   }
 

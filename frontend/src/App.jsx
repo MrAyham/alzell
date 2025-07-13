@@ -17,13 +17,14 @@ import KingControlCenter from './pages/KingControlCenter'
 import ConfigSettings from './pages/ConfigSettings'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
-import { useRole } from './RoleContext'
+import { useRole, usePermissions } from './RoleContext'
 import { useAuth } from './hooks/useAuth'
 import Login from './pages/login'
 import Register from './pages/register'
 
 function App() {
   const { role } = useRole()
+  const { isKing, canAccessPage } = usePermissions()
   const { user } = useAuth()
   const [page, setPage] = useState('home')
 
@@ -39,7 +40,7 @@ function App() {
   }
 
   let content
-  if (role === 'King' && page === 'king') {
+  if (isKing() && page === 'king') {
     content = <KingDashboard />
   } else if (page === 'dailyReports') {
     content = <DailyReports onBack={() => setPage('home')} />
