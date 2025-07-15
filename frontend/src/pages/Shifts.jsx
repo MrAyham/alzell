@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase'
 import { addShift } from '../supabase/shifts'
+import { usePermissions } from '../RoleContext'
 
 export default function Shifts() {
-  const [authorized, setAuthorized] = useState(false)
-  const [keywordOk, setKeywordOk] = useState(false)
-  const [password, setPassword] = useState('')
-  const [keyword, setKeyword] = useState('')
+  const { isKing } = usePermissions()
   const [staff, setStaff] = useState([])
   const [form, setForm] = useState({
     staff_id: '',
@@ -54,37 +52,8 @@ export default function Shifts() {
     }
   }
 
-  if (!authorized) {
-    return (
-      <div className='space-y-2'>
-        <input
-          type='password'
-          className='border border-[#800000] bg-black text-[#FFD700] p-1'
-          placeholder='Password'
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-        <button className='border border-[#800000] px-2 py-1' onClick={() => setAuthorized(password === 'Ayham')}>
-          Enter
-        </button>
-      </div>
-    )
-  }
-
-  if (!keywordOk) {
-    return (
-      <div className='space-y-2'>
-        <input
-          className='border border-[#800000] bg-black text-[#FFD700] p-1'
-          placeholder='Keyword'
-          value={keyword}
-          onChange={e => setKeyword(e.target.value)}
-        />
-        <button className='border border-[#800000] px-2 py-1' onClick={() => setKeywordOk(keyword === 'إضافة')}>
-          Unlock
-        </button>
-      </div>
-    )
+  if (!isKing()) {
+    return <div>You do not have access to this page.</div>
   }
 
   return (
