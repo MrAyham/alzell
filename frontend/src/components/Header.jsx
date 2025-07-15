@@ -1,8 +1,19 @@
-import { useRole, usePermissions } from '../RoleContext'
+import { usePermissions } from '../RoleContext'
+import { useRoleStore } from '../store/useRoleStore'
+import { supabase } from '../supabase'
+import { useNavigate } from 'react-router-dom'
 
 export default function Header() {
-  const { role } = useRole()
+  const role = useRoleStore(state => state.role)
+  const setRole = useRoleStore(state => state.setRole)
   const { isKing } = usePermissions()
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setRole('Anon')
+    navigate('/login')
+  }
 
   return (
     <header className="mb-4 flex justify-between items-center card-royal">
@@ -12,6 +23,7 @@ export default function Header() {
         {isKing() && (
           <button className="btn-royal">Settings</button>
         )}
+        <button onClick={handleLogout} className="btn-royal">Logout</button>
       </div>
     </header>
   )
