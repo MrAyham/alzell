@@ -4,7 +4,7 @@ create table roles (
 );
 
 create table users (
-  uid uuid primary key references auth.users(id),
+  id uuid primary key references auth.users(id),
   email text,
   role_id integer references roles(id)
 );
@@ -109,4 +109,8 @@ alter table users enable row level security;
 create policy "Allow insert for authenticated users"
 on users for insert
 to authenticated
-using (auth.uid() = uid);
+using (auth.uid() = id);
+
+create policy "Allow access to own user record"
+on users for select
+using (auth.uid() = id);
