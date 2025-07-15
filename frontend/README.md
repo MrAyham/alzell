@@ -25,7 +25,7 @@ their own tasks.
 
 ### Royal Access
 
-King privileges are determined solely by the `role` field in the `users` table.
-After logging in, the app fetches your role from Supabase and stores it locally
-with Zustand. If your role is `King`, the admin panel and additional controls
+King privileges are determined by the `role` stored in **public.users**.
+After logging in, the app reads this value from Supabase and places it directly
+into Zustand. If your role is `King`, the admin panel and additional controls
 become available automatically.
