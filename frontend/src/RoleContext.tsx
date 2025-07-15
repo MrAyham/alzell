@@ -13,9 +13,9 @@ export function useRole() {
 
 const rolePermissions: Record<Role | string, string[]> = {
   King: ['*'],
-  Admin: ['inventory', 'staff', 'dailyReports', 'orders'],
   Chef: ['inventory', 'dailyReports'],
-  Waiter: ['orders'],
+  Cashier: ['orders'],
+  Anon: [],
 }
 
 export function usePermissions() {

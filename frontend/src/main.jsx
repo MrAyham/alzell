@@ -4,6 +4,9 @@ import App from './App'
 import { RoleProvider } from './RoleContext'
 import { AuthProvider } from './hooks/useAuth'
 import Confirm from './pages/Confirm'
+import AddUser from './pages/AddUser'
+import Unauthorized from './pages/Unauthorized'
+import RequireRole from './components/RequireRole'
 import './index.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
@@ -14,6 +17,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <BrowserRouter>
           <Routes>
             <Route path="/confirm" element={<Confirm />} />
+            <Route path="/add-user" element={
+              <RequireRole roles={["King"]}>
+                <AddUser />
+              </RequireRole>
+            } />
+            <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="*" element={<App />} />
           </Routes>
         </BrowserRouter>

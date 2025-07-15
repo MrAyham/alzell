@@ -20,7 +20,6 @@ import Header from './components/Header'
 import { useRole, usePermissions } from './RoleContext'
 import { useAuth } from './hooks/useAuth'
 import Login from './pages/login'
-import Register from './pages/register'
 
 function App() {
   const { role } = useRole()
@@ -29,9 +28,6 @@ function App() {
   const [page, setPage] = useState('home')
 
   if (!user) {
-    if (location.hash === '#register') {
-      return <Register />
-    }
     return <Login />
   }
 
