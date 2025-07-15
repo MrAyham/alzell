@@ -1,136 +1,28 @@
-// ========= src/context/RoleContext.tsx =========
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { createClient, Session, User } from '@supabase/supabase-js';
+import { ReactNode } from 'react'
+import { useRoleStore, Role } from './store/useRoleStore'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-export interface RoleContextType {
-  role: string;
-  setRole: (role: string) => void;
+export function RoleProvider({ children }: { children: ReactNode }) {
+  return <>{children}</>
 }
 
-const RoleContext = createContext<RoleContextType | undefined>(undefined);
+export function useRole() {
+  const role = useRoleStore(state => state.role)
+  const setRole = useRoleStore(state => state.setRole)
+  return { role, setRole }
+}
 
-export const RoleProvider = ({ children }: { children: ReactNode }) => {
-  const [role, setRole] = useState<string>('anon');
-
-  useEffect(() => {
-    const loadRole = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      const user = session?.user;
-      if (!user) {
-        setRole('anon');
-        return;
-      }
-      const { data } = await supabase
-        .from('users')
-        .select('roles(name)')
-        .eq('id', user.id)
-        .single();
-      setRole(data?.roles?.name ?? 'anon');
-    };
-
-    loadRole();
-    const { data: listener } = supabase.auth.onAuthStateChange(loadRole);
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
-
-  return (
-    <RoleContext.Provider value={{ role, setRole }}>
-      {children}
-    </RoleContext.Provider>
-  );
-};
-
-export const useRole = (): RoleContextType => {
-  const context = useContext(RoleContext);
-  if (!context) {
-    throw new Error('useRole must be used within a RoleProvider');
-  }
-  return context;
-};
-
-const rolePermissions: Record<string, string[]> = {
+const rolePermissions: Record<Role | string, string[]> = {
   King: ['*'],
   Admin: ['inventory', 'staff', 'dailyReports', 'orders'],
   Chef: ['inventory', 'dailyReports'],
   Waiter: ['orders'],
-};
+}
 
 export function usePermissions() {
-  const { role } = useRole();
-  const perms = rolePermissions[role] || [];
-  const isKing = () => role === 'King';
-  const getUserPermissions = () => (isKing() ? ['*'] : perms);
-  const canAccessPage = (page: string) => isKing() || perms.includes(page);
-  return { isKing, canAccessPage, getUserPermissions };
+  const role = useRoleStore(state => state.role)
+  const perms = rolePermissions[role] || []
+  const isKing = () => role === 'King'
+  const getUserPermissions = () => (isKing() ? ['*'] : perms)
+  const canAccessPage = (page: string) => isKing() || perms.includes(page)
+  return { isKing, canAccessPage, getUserPermissions }
 }
-
-// ========= src/hooks/useAuth.tsx =========
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-
-interface AuthContextType {
-  user: User | null;
-  session: Session | null;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-
-  useEffect(() => {
-    // Initial session load
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setUser(data.session?.user ?? null);
-    });
-
-    // Listen for auth changes
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession);
-      setUser(newSession?.user ?? null);
-    });
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
-
-  const login = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-  };
-
-  const register = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({ email, password });
-    if (error) throw error;
-  };
-
-  const logout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, session, login, register, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
