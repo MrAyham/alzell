@@ -38,9 +38,6 @@ export default function Login() {
         <button className="bg-gold text-black px-4 py-2 rounded hover:scale-105 transition-transform">
           Login
         </button>
-        <p className="mt-2 text-sm">
-          No account? <a href="#register" className="text-gold underline" onClick={() => location.hash = 'register'}>Register</a>
-        </p>
       </form>
     </div>
   )

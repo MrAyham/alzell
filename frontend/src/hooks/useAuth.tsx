@@ -6,7 +6,6 @@ import { useRoleStore } from '../store/useRoleStore'
 interface AuthContextProps {
   user: any
   login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -16,31 +15,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null)
   const setRole = useRoleStore(state => state.setRole)
 
-  const fetchRole = async (uid: string) => {
+  const fetchRole = async (email: string) => {
     const { data, error } = await supabase
-      .from('users')
-      .select('roles(name)')
-      .eq('id', uid)
+      .from('staff')
+      .select('role')
+      .eq('email', email)
       .single()
     if (error) {
       console.error(error)
       setRole('Anon')
       return
     }
-    setRole((data?.roles as any)?.name ?? 'Anon')
+    setRole((data as any)?.role ?? 'Anon')
   }
 
   useEffect(() => {
     const fetchUser = async () => {
       const { data } = await supabase.auth.getUser()
       setUser(data.user)
-      if (data.user) await fetchRole(data.user.id)
+      if (data.user && data.user.email) await fetchRole(data.user.email)
       else setRole('Anon')
     }
     fetchUser()
     const { data: listener } = onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
-      if (session?.user) fetchRole(session.user.id)
+      if (session?.user?.email) fetchRole(session.user.email)
       else setRole('Anon')
     })
     return () => {
@@ -51,24 +50,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
-    if (data.user) await fetchRole(data.user.id)
+    if (data.user?.email) await fetchRole(data.user.email)
   }
 
-  const register = async (email: string, password: string) => {
-    if (!email || !password) {
-      alert('❌ Please enter all fields')
-      return
-    }
-
-    const { error } = await supabase.auth.signUp({ email, password })
-
-    if (error) {
-      alert(`❌ Failed to register: ${error.message}`)
-      return
-    }
-
-    alert('✅ Registration successful! Please check your email to verify your account.')
-  }
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut()
@@ -77,7 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
   {children}
     </AuthContext.Provider>
   )
