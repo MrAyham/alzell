@@ -27,7 +27,7 @@ export const RoleProvider = ({ children }: { children: ReactNode }) => {
       const { data } = await supabase
         .from('users')
         .select('roles(name)')
-        .eq('uid', user.id)
+        .eq('id', user.id)
         .single();
       setRole(data?.roles?.name ?? 'anon');
     };

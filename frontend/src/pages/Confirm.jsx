@@ -10,7 +10,7 @@ export default function Confirm() {
       } = await supabase.auth.getUser()
       if (user) {
         await supabase.from('users').insert([
-          { uid: user.id, email: user.email }
+          { id: user.id, email: user.email }
         ])
       }
       window.location.replace('/')
