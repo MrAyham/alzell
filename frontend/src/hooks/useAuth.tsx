@@ -17,8 +17,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchRole = async (email: string) => {
     const { data, error } = await supabase
-      .from('staff')
-      .select('role')
+      .from('users')
+      .select('roles(name)')
       .eq('email', email)
       .single()
     if (error) {
@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setRole('Anon')
       return
     }
-    setRole((data as any)?.role ?? 'Anon')
+    setRole((data as any)?.roles?.name ?? 'Anon')
   }
 
   useEffect(() => {
