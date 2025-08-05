@@ -17,6 +17,7 @@ import KingControlCenter from './pages/KingControlCenter'
 import ConfigSettings from './pages/ConfigSettings'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
+import Footer from './components/layout/footer'
 import { useRole, usePermissions } from './RoleContext'
 import { useAuth } from './hooks/useAuth'
 import Login from './pages/login'
@@ -71,12 +72,15 @@ function App() {
   }
 
   return (
-    <div className='p-6 min-h-screen flex'>
-      <Sidebar onNavigate={setPage} />
-      <div className='flex-1'>
-        <Header />
-        {content}
+    <div className='p-6 min-h-screen flex flex-col'>
+      <div className='flex flex-1'>
+        <Sidebar onNavigate={setPage} />
+        <div className='flex-1 flex flex-col'>
+          <Header />
+          <div className='flex-1'>{content}</div>
+        </div>
       </div>
+      <Footer />
     </div>
   )
 }
