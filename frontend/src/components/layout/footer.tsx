@@ -1,3 +1,12 @@
+codex/build-home-page-layout
+export const Footer = () => (
+  <footer className="bg-gray-800 text-white p-4 text-center">
+    <p className="text-sm">Footer</p>
+  </footer>
+);
+
+export default Footer;
+
 import React from 'react'
 
 const links = [
@@ -31,3 +40,4 @@ export default function Footer() {
   )
 }
 
+main
